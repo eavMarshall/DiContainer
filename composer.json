@@ -1,0 +1,12 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Di\\": "src/",
+            "Dice\\": "tests/Dice/",
+            "tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5"
+    }
+}

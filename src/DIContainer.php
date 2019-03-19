@@ -1,4 +1,10 @@
 <?php
+/**
+ * @author     Elliott Marshall                                            *
+ * @copyright  2019
+ * @license    MIT
+ * @version    1.0
+ */
 namespace Di;
 
 use Exception;

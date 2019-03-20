@@ -1,6 +1,6 @@
 # DiContainer
 
-Super simple dependency injection container for php 5.6
+Super simple dependency injection container for php
 
 #### Getting started
 To get an instance and all it's dependencies is as easy as this
@@ -40,9 +40,11 @@ or you could call the instance and add the rules later
 To run: vendor\bin\phpunit --bootstrap vendor\autoload.php tests\tests
 
 # Performance test DiContainer vs Dice
-## PHP 5.6
 To run: vendor\bin\phpunit --bootstrap vendor\autoload.php tests\performanceTests
-Dice is super fast, doing some test against it seem like a good idea (https://github.com/Level-2/Dice/tree/v2.0-PHP5.4-5.5)
+
+Dice is super fast, doing some test against it seem like a good idea 
+(https://github.com/Level-2/Dice)
+
 ### Create class A 10000 times
 Container | Time
 --- | ---

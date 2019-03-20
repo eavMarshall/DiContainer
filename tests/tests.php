@@ -9,8 +9,9 @@ use tests\testClasses\ClassThatNeedsClassWithConstructorDependencies;
 use tests\testClasses\ClassWithDiContainerDependency;
 use tests\testClasses\ClassWithoutDependencies;
 use tests\testClasses\nested\top;
+use PHPUnit\Framework\TestCase;
 
-final class tests extends PHPUnit_Framework_TestCase
+final class tests extends TestCase
 {
     public function testGetSaveInstanceOfReturnsSameInstance()
     {

@@ -5,8 +5,9 @@ use Dice\Dice;
 use tests\testClasses\ClassHoldingSessionInfoIsUpdated;
 use tests\testClasses\ClassWithDiContainerDependency;
 use tests\testClasses\nested\top;
+use PHPUnit\Framework\TestCase;
 
-final class performanceTests extends PHPUnit_Framework_TestCase
+final class performanceTests extends TestCase
 {
     const REPEAT = 10000;
 
@@ -56,6 +57,8 @@ final class performanceTests extends PHPUnit_Framework_TestCase
         );
 
         printf("\n\n");
+
+        self::assertTrue(1 == true);
     }
 
     private function runDiContainerTimer($container, $class)

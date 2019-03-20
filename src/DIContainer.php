@@ -9,7 +9,6 @@ namespace Di;
 
 use Exception;
 use ReflectionClass;
-use ReflectionParameter;
 
 class DIContainer
 {
@@ -63,39 +62,11 @@ class DIContainer
         }
 
         if ($this->implementsNewInstanceCache[$class]) {
-            return isset($this->singeInstancesCache[$class])
-                ? $this->singeInstancesCache[$class]
-                : $this->singeInstancesCache[$class] = new $class(...$this->getParams($class));
+            return $this->singeInstancesCache[$class]
+                ?? $this->singeInstancesCache[$class] = new $class(...$this->getParams($class));
         }
 
         return new $class(...$this->getParams($class));
-    }
-
-    /**
-     * @deprecated
-     * I dont' want to do this, but php 5.6 doesn't support getting the type hint, so I'm
-     * force to infer the type via the __toString() method.
-     * When we finally move to php7 we can swap this out for ReflectionParameter::getType()
-     * @param ReflectionParameter $parameter
-     * @return mixed
-     * @throws Exception
-     */
-    private function getTypeForPHP5_6(ReflectionParameter $parameter)
-    {
-        $parameterString = $parameter->__toString();
-        if (isset($this->reflectionParameterCache[$parameterString])) {
-            return $this->reflectionParameterCache[$parameterString];
-        }
-
-        $matches = [];
-        preg_match_all("/\[([^\]]*)\]/", $parameterString, $matches);
-        $matches = explode(' ', trim($matches[1][0]));
-
-        if (count($matches) === 3) {
-            return $this->reflectionParameterCache[$parameterString] = $matches[1];
-        }
-
-        throw new Exception("Unable to find type from ReflectionParameter $parameterString");
     }
 
     private function getParams($classPath)
@@ -114,11 +85,12 @@ class DIContainer
 
     private function getParamOnFirstRun($classPath)
     {
-        $parameters = (new ReflectionClass($classPath))->getConstructor()->getParameters() ?: [];
+        $constructor = (new ReflectionClass($classPath))->getConstructor();
+        $parameters = $constructor ? $constructor->getParameters() ?: [] : [];
         $this->constructorCache[$classPath] = [];
         $initialParamInstances = [];
         foreach ($parameters as $parameter) {
-            $initialParamInstances[] = $this->getParamInstance($this->constructorCache[$classPath][] = $this->getTypeForPHP5_6($parameter));
+            $initialParamInstances[] = $this->getParamInstance($this->constructorCache[$classPath][] = $parameter->getType()->__toString());
         }
 
         return $initialParamInstances;

@@ -49,49 +49,49 @@ Dice is super fast, doing some test against it seem like a good idea
 Container | Time
 --- | ---
 php5.6|-
-Dice|0.0078229904174805
-DiContainer|0.0034599304199219
+Dice|0.0071628093719482
+DiContainer|0.0036818981170654
 php7.3|-
-Dice|0.0032179355621338
-DiContainer|0.0030741691589355
+Dice|0.0051369667053223
+DiContainer|0.0067892074584961
 
 ### Create class J 10000 times
 Container | Time
 --- | ---
 php5.6|-
-Dice|0.21785092353821
-DiContainer|0.12657999992371
+Dice|0.21895003318787
+DiContainer|0.12617683410645
 php7.3|-
-Dice|0.071502923965454
-DiContainer|0.059846878051758
+Dice|0.1142840385437
+DiContainer|0.052088975906372
 
 ### Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated 10000 times
 Container | Time
 --- | ---
 php5.6|-
-Dice|0.026506900787354
-DiContainer|0.019238948822021
+Dice|0.024976968765259
+DiContainer|0.020330905914307
 php7.3|-
-Dice|0.018687963485718
-DiContainer|0.010818004608154
+Dice|0.010689973831177
+DiContainer|0.0079789161682129
 
 ### Create instance 3 level deep x2 each layer 10000 times
 Container | Time
 --- | ---
 php5.6|-
-Dice|0.11162400245667
-DiContainer|0.079232931137085
+Dice|0.11167407035828
+DiContainer|0.082062005996704
 php7.3|-
-Dice|0.045221090316772
-DiContainer|0.036789894104004
+Dice|0.042171955108643
+DiContainer|0.040060043334961
 
 
 ### Inject itself into class 10000 times
 Container | Time
 --- | ---
 php5.6|-
-Dice|0.024734973907471
-DiContainer|0.0049588680267334
+Dice|0.024260997772217
+DiContainer|0.0051960945129395
 php7.3|-
-Dice|0.010346174240112
-DiContainer|0.0016400814056396
+Dice|0.010339021682739
+DiContainer|0.001223087310791

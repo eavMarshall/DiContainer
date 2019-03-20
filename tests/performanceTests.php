@@ -66,7 +66,7 @@ final class performanceTests extends PHPUnit_Framework_TestCase
             $a = $container->getInstanceOf($class);
         }
         $t2 = microtime(true);
-        printf("DiContainer \t" . ($t2 - $t1));
+        printf('DiContainer|' . ($t2 - $t1));
     }
 
     private function runDiceTimer($container, $class)
@@ -77,14 +77,16 @@ final class performanceTests extends PHPUnit_Framework_TestCase
             $a = $container->create($class);
         }
         $t2 = microtime(true);
-        printf("Dice \t\t\t" . ($t2 - $t1));
+        printf('Dice|' . ($t2 - $t1));
     }
 
     private function runTestOutput($title, array $containers, $class)
     {
         if ($title !== null) {
             printf("\n");
-            printf($title);
+            printf("### {$title}");
+            printf("Container | Time\n");
+            printf('--- | ---');
         }
         foreach ($containers as $name => $container) {
             printf("\n");

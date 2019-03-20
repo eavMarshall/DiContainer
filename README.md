@@ -2,6 +2,21 @@
 
 Super simple dependency injection container for php 5.6
 
+To get an instance and all it's dependencies is as easy as this
+```php
+DiContainer::loadInstanceOf(ClassName::class)
+```
+
+To make DiContainer return the same instance every time make sure your class implements SingleInstance
+```php
+class ClassName implements SingleInstance
+{
+...
+}
+```
+
+To override SingleInstance from an extend class implement NewInstance 
+
 ## Tests
 To run: vendor\bin\phpunit --bootstrap vendor\autoload.php tests\tests
 

@@ -1,6 +1,6 @@
 # DiContainer
 
-Super simple dependency injection container for php 5.6
+Super simple dependency injection container for php
 
 #### Getting started
 To get an instance and all it's dependencies is as easy as this

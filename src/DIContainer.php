@@ -23,7 +23,6 @@ class DIContainer
     private $overrideRules = [];
     private $implementsNewInstanceCache = [];
     private $singeInstancesCache = [];
-    private $reflectionParameterCache = [];
     private $constructorCache = [];
 
     protected function __construct()

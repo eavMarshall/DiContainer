@@ -1,6 +1,6 @@
 <?php
 /**
- * @author     Elliott Marshall                                            *
+ * @author     Elliott Marshall
  * @copyright  2019
  * @license    MIT
  * @version    1.0
@@ -53,25 +53,36 @@ class DIContainer
 
     public function getInstanceOf($class)
     {
-        if (!isset($this->implementsNewInstanceCache[$class])) {
-            $implements = class_implements($class, true);
-            $this->implementsNewInstanceCache[$class] = !empty($implements)
-                && !in_array(NewInstance::class, $implements, false)
-                && in_array(SingleInstance::class, $implements, false);
+        if (isset($this->singeInstancesCache[$class])) {
+            return $this->singeInstancesCache[$class];
         }
 
-        if ($this->implementsNewInstanceCache[$class]) {
-            return $this->singeInstancesCache[$class]
-                ?? $this->singeInstancesCache[$class] = new $class(...$this->getParams($class));
+        $instance = $this->createNewClassInstance($class);
+
+        if ($this->implementsNewInstanceCache[$class] !== false) {
+            $this->singeInstancesCache[$class] = $instance;
         }
 
-        return new $class(...$this->getParams($class));
+        return $instance;
+    }
+
+    private function createNewClassInstance($class) {
+        $params = $this->getParams($class);
+        if (empty($params)) {
+            return new $class();
+        }
+
+        return new $class(...$params);
     }
 
     private function getParams($classPath)
     {
         if (!isset($this->constructorCache[$classPath])) {
             return $this->getParamOnFirstRun($classPath);
+        }
+
+        if (!$this->constructorCache[$classPath]) {
+            return null;
         }
 
         $paramInstances = [];
@@ -84,12 +95,21 @@ class DIContainer
 
     private function getParamOnFirstRun($classPath)
     {
-        $constructor = (new ReflectionClass($classPath))->getConstructor();
-        $parameters = $constructor ? $constructor->getParameters() ?: [] : [];
+        $reflectionClass = new ReflectionClass($classPath);
+        $constructor = $reflectionClass->getConstructor();
+
+        $this->implementsNewInstanceCache[$classPath] = !$reflectionClass->implementsInterface(NewInstance::class)
+            && $reflectionClass->implementsInterface(SingleInstance::class);
+
+        if ($constructor === null) {
+            return $this->constructorCache[$classPath] = false;
+        }
+
+        $parameters = $constructor->getParameters();
         $this->constructorCache[$classPath] = [];
         $initialParamInstances = [];
         foreach ($parameters as $parameter) {
-            $initialParamInstances[] = $this->getParamInstance($this->constructorCache[$classPath][] = $parameter->getType()->__toString());
+            $initialParamInstances[] = $this->getParamInstance($this->constructorCache[$classPath][] = $parameter->getType()->getName());
         }
 
         return $initialParamInstances;
@@ -97,10 +117,10 @@ class DIContainer
 
     private function getParamInstance($type)
     {
-        return $this->getSingletonOverrides($type) ?: $this->getInstanceOf($type);
+        return $this->getOverrideRules($type) ?: $this->getInstanceOf($type);
     }
 
-    private function getSingletonOverrides($type)
+    private function getOverrideRules($type)
     {
         return isset($this->overrideRules[$type]) ? $this->overrideRules[$type]() : null;
     }

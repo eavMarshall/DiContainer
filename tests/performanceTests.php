@@ -22,19 +22,26 @@ final class performanceTests extends TestCase
             'A'
         );
 
+        $dice = new Dice();
+        $containersToTest = ['dice' => $dice, 'diContainer' => DIContainer::getInstance()];
+
         $this->runTestOutput(
             'Create class J ' . self::REPEAT . ' times',
             $containersToTest,
             'J'
         );
 
-        $dice->addRule(Di\SessionInfo::class, ['shared' => true]);
+        $dice = new Dice();
+        $containersToTest = ['dice' => $dice, 'diContainer' => DIContainer::getInstance()];
+        $dice = $dice->addRule(Di\SessionInfo::class, ['shared' => true]);
         $this->runTestOutput(
             'Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated ' . self::REPEAT . ' times',
             $containersToTest,
             ClassHoldingSessionInfoIsUpdated::class
         );
 
+        $dice = new Dice();
+        $containersToTest = ['dice' => $dice, 'diContainer' => DIContainer::getInstance()];
         $this->runTestOutput(
             'Create instance 3 level deep x2 each layer ' . self::REPEAT . ' times',
             $containersToTest,
@@ -43,7 +50,8 @@ final class performanceTests extends TestCase
 
         printf("\n");
         printf('Inject itself into class ' . self::REPEAT . ' times');
-        $dice->addRule(Dice::class, ['shared' => true]);
+        $dice = new Dice();
+        $dice = $dice->addRule(Dice::class, ['shared' => true]);
         $dice->create(Dice::class);
         $this->runTestOutput(
             null,

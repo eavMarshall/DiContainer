@@ -52,8 +52,8 @@ php5.6|-
 Dice|0.0071628093719482
 DiContainer|0.0036818981170654
 php7.3|-
-Dice|0.0051369667053223
-DiContainer|0.0067892074584961
+Dice|0.0028738975524902
+DiContainer|0.0032269954681396
 
 ### Create class J 10000 times
 Container | Time
@@ -62,8 +62,8 @@ php5.6|-
 Dice|0.21895003318787
 DiContainer|0.12617683410645
 php7.3|-
-Dice|0.1142840385437
-DiContainer|0.052088975906372
+Dice|0.064341068267822
+DiContainer|0.071835994720459
 
 ### Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated 10000 times
 Container | Time
@@ -72,8 +72,8 @@ php5.6|-
 Dice|0.024976968765259
 DiContainer|0.020330905914307
 php7.3|-
-Dice|0.010689973831177
-DiContainer|0.0079789161682129
+Dice|0.012259006500244
+DiContainer|0.0083010196685791
 
 ### Create instance 3 level deep x2 each layer 10000 times
 Container | Time
@@ -82,8 +82,8 @@ php5.6|-
 Dice|0.11167407035828
 DiContainer|0.082062005996704
 php7.3|-
-Dice|0.042171955108643
-DiContainer|0.040060043334961
+Dice|0.042526006698608
+DiContainer|0.041025876998901
 
 
 ### Inject itself into class 10000 times
@@ -93,5 +93,5 @@ php5.6|-
 Dice|0.024260997772217
 DiContainer|0.0051960945129395
 php7.3|-
-Dice|0.010339021682739
-DiContainer|0.001223087310791
+Dice|0.0076770782470703
+DiContainer|0.00091981887817383

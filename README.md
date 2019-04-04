@@ -49,8 +49,8 @@ Dice is super fast, doing some test against it seem like a good idea
 Container | Time
 --- | ---
 php5.6|-
-Dice|0.0071628093719482
-DiContainer|0.0036818981170654
+Dice|0.0073890686035156
+DiContainer|0.0036461353302002
 php7.3|-
 Dice|0.005648136138916
 DiContainer|0.0040280818939209
@@ -59,8 +59,8 @@ DiContainer|0.0040280818939209
 Container | Time
 --- | ---
 php5.6|-
-Dice|0.21895003318787
-DiContainer|0.12617683410645
+Dice|0.19920897483826
+DiContainer|0.12636804580688
 php7.3|-
 Dice|0.071223974227905
 DiContainer|0.064021110534668
@@ -69,8 +69,8 @@ DiContainer|0.064021110534668
 Container | Time
 --- | ---
 php5.6|-
-Dice|0.024976968765259
-DiContainer|0.020330905914307
+Dice|0.027147054672241
+DiContainer|0.019090175628662
 php7.3|-
 Dice|0.010825872421265
 DiContainer|0.0092861652374268
@@ -79,8 +79,8 @@ DiContainer|0.0092861652374268
 Container | Time
 --- | ---
 php5.6|-
-Dice|0.11167407035828
-DiContainer|0.082062005996704
+Dice|0.11182618141174
+DiContainer|0.095668077468872
 php7.3|-
 Dice|0.041492223739624
 DiContainer|0.04243803024292
@@ -90,8 +90,8 @@ DiContainer|0.04243803024292
 Container | Time
 --- | ---
 php5.6|-
-Dice|0.024260997772217
-DiContainer|0.0051960945129395
+Dice|0.03341007232666
+DiContainer|0.0069601535797119
 php7.3|-
 Dice|0.0085511207580566
 DiContainer|0.00095200538635254

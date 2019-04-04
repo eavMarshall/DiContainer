@@ -5,3 +5,9 @@ composer.phar
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
 tests/.phpunit.result.cache
+.idea/modules.xml
+.idea/workspace.xml
+.idea/misc.xml
+.idea/DiContainer.iml
+.idea/workspace.xml
+.idea/DiContainer.iml

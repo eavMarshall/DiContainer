@@ -2,6 +2,12 @@
 
 Super simple dependency injection container for php
 
+Created this container with the following in mind
+* Containers should never have to load up rules each and every time a connection is made. Especially no loading from JSON or XML files.
+* Rules should be specified by the class via interface, this means rules will only be loaded when you need them
+* Everything should be namespace
+* Do not use the DiContainer::loadInstanceOf() function. Create your own instance of DiContainer and wrap it in a function inside your entrance class. So you can mock it out, and replace it with a DIContainer that will return your mocks.
+
 #### Getting started
 To get an instance and all it's dependencies is as easy as this
 ```php

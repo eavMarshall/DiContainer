@@ -31,7 +31,8 @@ class ClassName implements SingleInstance
 To override SingleInstance from an extend class implement NewInstance 
 
 #### Adding rules
-You can add your rules directly to the resetOverrideRules
+You can add your rules directly to the resetOverrideRules.
+You shouldn't do this in your main application. You should only do this when you want to replace a instance with a mock.
 ```php
     public function resetOverrideRules()
     {

@@ -1,5 +1,5 @@
 # DiContainer
-Super simple dependency injection container for PHP 5.6
+Super simple dependency injection container for PHP 7
 
 #### How to start
 ```
@@ -87,32 +87,52 @@ To run: vendor\bin\phpunit --bootstrap vendor\autoload.php tests\performanceTest
 Dice is super fast, doing some test against it seem like a good idea 
 (https://github.com/Level-2/Dice)
 
-### Create class A 100000 times
-Container | Time
---- | ---
-Dice|0.027563095092773
-DiContainer|0.032258033752441
+### A - Z tests
+This test creates classes A - Z. Class B has a dependency on A, Class C has a dependency on C, all the way down to Z
 
-### Create class J 100000 times
-Container | Time
---- | ---
-Dice|0.52730202674866
-DiContainer|0.45457315444946
+Class | Dice | DIContainer
+--- | --- | ---
+A|0.022691965103149|0.02939510345459
+B|0.081801891326904|0.08405590057373
+C|0.13765788078308|0.12718892097473
+D|0.19683003425598|0.19118094444275
+E|0.24084711074829|0.21868896484375
+F|0.2906219959259|0.271075963974
+G|0.34441590309143|0.32065486907959
+H|0.39684295654297|0.3698878288269
+I|0.45188999176025|0.42795491218567
+J|0.50853800773621|0.46729183197021
+K|0.55266094207764|0.50998997688293
+L|0.62127590179443|0.57713103294373
+M|0.65546202659607|0.60470104217529
+N|0.72124195098877|0.64654994010925
+O|0.7884259223938|0.6949610710144
+P|0.82865810394287|0.75750207901001
+Q|0.87227296829224|0.7867259979248
+R|0.93593001365662|0.83533000946045
+S|0.98573088645935|0.91264700889587
+T|1.0602598190308|0.9466769695282
+U|1.091826915741|0.97544097900391
+V|1.1414630413055|1.0256388187408
+W|1.2162899971008|1.0799210071564
+X|1.2556359767914|1.1350028514862
+Y|1.3215668201447|1.1830060482025
+Z|1.4056069850922|1.2350149154663
 
 ### Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated 100000 times
 Container | Time
 --- | ---
-Dice|0.082279920578003
-DiContainer|0.065804004669189
+Dice|0.071977853775024
+DiContainer|0.072658061981201
 
 ### Create instance 3 level deep x2 each layer 100000 times
 Container | Time
 --- | ---
-Dice|0.31930804252625
-DiContainer|0.34949707984924
+Dice|0.34882283210754
+DiContainer|0.35588312149048
 
-Inject itself into class 100000 times
+### Inject itself into class 100000 times
 Container | Time
 --- | ---
-Dice|0.061893939971924
-DiContainer|0.010216951370239
+Dice|0.065325975418091
+DiContainer|0.0098321437835693

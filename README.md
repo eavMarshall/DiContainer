@@ -87,53 +87,32 @@ To run: vendor\bin\phpunit --bootstrap vendor\autoload.php tests\performanceTest
 Dice is super fast, doing some test against it seem like a good idea 
 (https://github.com/Level-2/Dice)
 
-### Create class A 10000 times
+### Create class A 100000 times
 Container | Time
 --- | ---
-php5.6|-
-Dice|0.0071628093719482
-DiContainer|0.0036818981170654
-php7.3|-
-Dice|0.005648136138916
-DiContainer|0.0040280818939209
+Dice|0.027563095092773
+DiContainer|0.032258033752441
 
-### Create class J 10000 times
+### Create class J 100000 times
 Container | Time
 --- | ---
-php5.6|-
-Dice|0.21895003318787
-DiContainer|0.12617683410645
-php7.3|-
-Dice|0.071223974227905
-DiContainer|0.064021110534668
+Dice|0.52730202674866
+DiContainer|0.45457315444946
 
-### Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated 10000 times
+### Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated 100000 times
 Container | Time
 --- | ---
-php5.6|-
-Dice|0.024976968765259
-DiContainer|0.020330905914307
-php7.3|-
-Dice|0.010825872421265
-DiContainer|0.0092861652374268
+Dice|0.082279920578003
+DiContainer|0.065804004669189
 
-### Create instance 3 level deep x2 each layer 10000 times
+### Create instance 3 level deep x2 each layer 100000 times
 Container | Time
 --- | ---
-php5.6|-
-Dice|0.11167407035828
-DiContainer|0.082062005996704
-php7.3|-
-Dice|0.041492223739624
-DiContainer|0.04243803024292
+Dice|0.31930804252625
+DiContainer|0.34949707984924
 
-
-### Inject itself into class 10000 times
+Inject itself into class 100000 times
 Container | Time
 --- | ---
-php5.6|-
-Dice|0.024260997772217
-DiContainer|0.0051960945129395
-php7.3|-
-Dice|0.0085511207580566
-DiContainer|0.00095200538635254
+Dice|0.061893939971924
+DiContainer|0.010216951370239

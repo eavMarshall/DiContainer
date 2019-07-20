@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 final class performanceTests extends TestCase
 {
-    const REPEAT = 10000;
+    const REPEAT = 100000;
 
     public function testDiceVsDiComponent()
     {
@@ -49,7 +49,9 @@ final class performanceTests extends TestCase
         );
 
         printf("\n");
-        printf('Inject itself into class ' . self::REPEAT . ' times');
+        printf('Inject itself into class ' . self::REPEAT . " times\n");
+        printf("Container | Time\n");
+        printf('--- | ---');
         $dice = new Dice();
         $dice = $dice->addRule(Dice::class, ['shared' => true]);
         $dice->create(Dice::class);
@@ -96,7 +98,7 @@ final class performanceTests extends TestCase
         if ($title !== null) {
             printf("\n");
             printf("### {$title}");
-            printf("Container | Time\n");
+            printf("\nContainer | Time\n");
             printf('--- | ---');
         }
         foreach ($containers as $name => $container) {

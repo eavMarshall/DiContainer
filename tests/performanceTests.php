@@ -15,25 +15,27 @@ final class performanceTests extends TestCase
     public function testDiceVsDiComponent()
     {
         $dice = new Dice();
+        $diContainer = new DIContainer();
 
         printf("### A - Z tests\nThis test creates classes A - Z. Class B has a dependency on A, Class C has a" .
-        " dependency on C, all the way down to Z");
-        printf("\nClass | Dice | DIContainer\n");
+            " dependency on B, all the way down to Z");
+        printf("\n\nClass | Dice | DIContainer\n");
         printf('--- | --- | ---');
 
         $letters = range('A', 'Z');
         $previousLetter =  null;
         foreach ($letters as $letter) {
             $this->runAToZTest(
-                ['dice' => $dice, 'diContainer' => DIContainer::getInstance()],
+                ['dice' => $dice, 'diContainer' => $diContainer],
                 $letter
             );
         }
         printf("\n");
 
         $dice = new Dice();
-        $dice = $dice->addRule(Di\SessionInfo::class, ['shared' => true]);
-        $containersToTest = ['dice' => $dice, 'diContainer' => DIContainer::getInstance()];
+        $diContainer = new DIContainer();
+        $dice->addRule(Di\SessionInfo::class, ['shared' => true]);
+        $containersToTest = ['dice' => $dice, 'diContainer' => $diContainer];
         $this->runTestOutput(
             'Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated ' . self::REPEAT . ' times',
             $containersToTest,
@@ -41,19 +43,31 @@ final class performanceTests extends TestCase
         );
 
         $dice = new Dice();
-        $containersToTest = ['dice' => $dice, 'diContainer' => DIContainer::getInstance()];
+        $diContainer = new DIContainer();
+        $containersToTest = ['dice' => $dice, 'diContainer' => $diContainer];
         $this->runTestOutput(
             'Create instance 3 level deep x2 each layer ' . self::REPEAT . ' times',
             $containersToTest,
             top::class
         );
 
+        $dice = new Dice();
+        $diContainer = new DIContainer();
+        $containersToTest = ['dice' => $dice, 'diContainer' => $diContainer];
+        $this->runTestOutput(
+            'Create AllClassesAToZDependencies ' . self::REPEAT . ' times'
+            . "\nThis class has a dependency on all the A - Z classes\n",
+            $containersToTest,
+            'AllClassesAToZDependencies'
+        );
+
         printf("\n");
-        printf('Inject itself into class ' . self::REPEAT . " times\n");
+        printf('### Inject itself into class ' . self::REPEAT . " times\n");
         printf("Container | Time\n");
         printf('--- | ---');
         $dice = new Dice();
-        $dice = $dice->addRule(Dice::class, ['shared' => true]);
+        $diContainer = new DIContainer();
+        $dice->addRule(Dice::class, ['shared' => true]);
         $dice->create(Dice::class);
         $this->runTestOutput(
             null,
@@ -62,7 +76,7 @@ final class performanceTests extends TestCase
         );
         $this->runTestOutput(
             null,
-            ['diContainer' => DIContainer::getInstance()],
+            ['diContainer' => $diContainer],
             ClassWithDiContainerDependency::class
         );
 
@@ -161,6 +175,29 @@ foreach ($letters as $letter) {
 
     $previousLetter = $letter;
 }
+
+$level1ConstructorArguments = '';
+$level1Fields = '';
+$level1Assignments = '';
+
+foreach ($letters as $letter) {
+    $level1ConstructorArguments .= "{$letter} \${$letter}, ";
+    $level1Fields .= "\${$letter}, ";
+    $level1Assignments .= "\$this->{$letter} = \${$letter}; ";
+}
+
+$level1ConstructorArguments = substr($level1ConstructorArguments, 0, -2);
+$level1Fields = substr($level1Fields, 0, -2);
+
+eval("
+    class AllClassesAToZDependencies
+    { 
+        private {$level1Fields};
+        public function __construct({$level1ConstructorArguments}) {
+            {$level1Assignments}
+        }
+    }
+");
 
 class DiceDependency
 {

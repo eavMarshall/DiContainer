@@ -136,8 +136,8 @@ This class has a dependency on all the A - Z classes
 
 Container | Time
 --- | ---
-Dice|25.712474822998
-DiContainer|26.956541061401
+Dice|24.008610010147
+DiContainer|24.062613964081
 
 ### Inject itself into class 100000 times
 Container | Time

@@ -74,7 +74,7 @@ class DIContainer
                 return $this->singeInstancesCache[$class];
             }
 
-            $instance = $this->createNewClassInstance($class);
+            $instance = new $class(...$this->getParams($class));
 
             if ($this->implementsNewInstanceCache[$class] !== false) {
                 $this->singeInstancesCache[$class] = $instance;
@@ -86,16 +86,6 @@ class DIContainer
         return new $class(...$parameters);
     }
 
-    private function createNewClassInstance($class)
-    {
-        $params = $this->getParams($class);
-        if (empty($params)) {
-            return new $class();
-        }
-
-        return new $class(...$params);
-    }
-
     private function getParams($classPath)
     {
         if (!isset($this->constructorCache[$classPath])) {
@@ -103,7 +93,7 @@ class DIContainer
         }
 
         if (!$this->constructorCache[$classPath]) {
-            return null;
+            return [];
         }
 
         $paramInstances = [];
@@ -123,7 +113,7 @@ class DIContainer
             && $reflectionClass->implementsInterface(SingleInstance::class);
 
         if ($constructor === null) {
-            return $this->constructorCache[$classPath] = false;
+            return $this->constructorCache[$classPath] = [];
         }
 
         $parameters = $constructor->getParameters();
@@ -143,6 +133,6 @@ class DIContainer
 
     private function getOverrideRules($type)
     {
-        return isset($this->overrideRules[$type]) ? $this->overrideRules[$type]() : null;
+        return isset($this->overrideRules[$type]) ? $this->overrideRules[$type]() : [];
     }
 }

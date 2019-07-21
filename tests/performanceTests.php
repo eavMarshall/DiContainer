@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 final class performanceTests extends TestCase
 {
-    const REPEAT = 100000;
+    const REPEAT = 1000;
 
     public function testDiceVsDiComponent()
     {
@@ -87,12 +87,12 @@ final class performanceTests extends TestCase
 
     private function runDiContainerTimer($container, $class)
     {
-        printf('DiContainer|' . $this->runDiContainerTimerNoPrint($container, $class));
+        printf("DiContainer|{$this->runDiContainerTimerNoPrint($container, $class)}ms");
     }
 
     private function runDiceTimer($container, $class)
     {
-        printf('Dice|' . $this->runDiceTimerNoPrint($container, $class));
+        printf("Dice|{$this->runDiceTimerNoPrint($container, $class)}ms");
     }
 
     private function runTestOutput($title, array $containers, $class)
@@ -124,7 +124,7 @@ final class performanceTests extends TestCase
             $a = $container->getInstanceOf($class);
         }
         $t2 = microtime(true);
-        return $t2 - $t1;
+        return round(($t2 - $t1) * 1000.0, 2);
     }
 
     private function runDiceTimerNoPrint($container, $class)
@@ -135,7 +135,7 @@ final class performanceTests extends TestCase
             $a = $container->create($class);
         }
         $t2 = microtime(true);
-        return $t2 - $t1;
+        return round(($t2 - $t1) * 1000.0, 2);
     }
 
     private function runAToZTest(array $containers, $class)
@@ -143,9 +143,9 @@ final class performanceTests extends TestCase
         printf("\n{$class}");
         foreach ($containers as $name => $container) {
             if ($name === 'dice') {
-                printf("|{$this->runDiceTimerNoPrint($container, $class)}");
+                printf("|{$this->runDiceTimerNoPrint($container, $class)}ms");
             } else {
-                printf("|{$this->runDiContainerTimerNoPrint($container, $class)}");
+                printf("|{$this->runDiContainerTimerNoPrint($container, $class)}ms");
             }
         }
     }

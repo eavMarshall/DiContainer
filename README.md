@@ -92,55 +92,55 @@ This test creates classes A - Z. Class B has a dependency on A, Class C has a de
 
 Class | Dice | DIContainer
 --- | --- | ---
-A|0.044289112091064|0.042750120162964
-B|0.10041403770447|0.12282204627991
-C|0.17916893959045|0.17083883285522
-D|0.31793117523193|0.25261807441711
-E|0.30870008468628|0.33421611785889
-F|0.42656183242798|0.47712397575378
-G|0.5031590461731|0.54069995880127
-H|0.54921579360962|0.66392493247986
-I|0.65836501121521|0.60846400260925
-J|0.68578720092773|0.67256999015808
-K|0.7875669002533|0.86429595947266
-L|0.84890699386597|0.84253787994385
-M|0.96507692337036|0.98111581802368
-N|0.97194695472717|1.0832509994507
-O|1.0355582237244|1.0185220241547
-P|1.2008919715881|1.1531550884247
-Q|1.5146260261536|1.6249480247498
-R|1.5083479881287|1.4917008876801
-S|1.377368927002|1.4957458972931
-T|1.5540552139282|1.416934967041
-U|1.4882838726044|1.4600028991699
-V|1.6365699768066|1.5198199748993
-W|1.6227700710297|1.7654569149017
-X|1.6776328086853|1.7138221263885
-Y|1.8897731304169|1.7995500564575
-Z|1.8878500461578|1.741837978363
+A|0.56ms|0.88ms
+B|3.34ms|1.32ms
+C|1.75ms|1.66ms
+D|2.36ms|2.3ms
+E|2.91ms|2.98ms
+F|3.67ms|3.82ms
+G|5.38ms|7.3ms
+H|8.24ms|7.7ms
+I|6.28ms|5.76ms
+J|6.75ms|6.08ms
+K|9.74ms|7.33ms
+L|7.61ms|9.51ms
+M|13.47ms|13.38ms
+N|15.32ms|14.52ms
+O|16.03ms|15.63ms
+P|17.79ms|16.52ms
+Q|18.8ms|17.2ms
+R|20.17ms|19.59ms
+S|20.6ms|20.67ms
+T|16.02ms|12.48ms
+U|14.58ms|15.24ms
+V|14.17ms|13.71ms
+W|14.88ms|14.36ms
+X|19.4ms|24.8ms
+Y|27.07ms|26.51ms
+Z|28.88ms|27.95ms
 
-### Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated 100000 times
+### Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated 1000 times
 Container | Time
 --- | ---
-Dice|0.11007595062256
-DiContainer|0.090126037597656
+Dice|1.88ms
+DiContainer|1.57ms
 
-### Create instance 3 level deep x2 each layer 100000 times
+### Create instance 3 level deep x2 each layer 1000 times
 Container | Time
 --- | ---
-Dice|0.43825888633728
-DiContainer|0.47243690490723
+Dice|5.28ms
+DiContainer|4.3ms
 
-### Create AllClassesAToZDependencies 100000 times
+### Create AllClassesAToZDependencies 1000 times
 This class has a dependency on all the A - Z classes
 
 Container | Time
 --- | ---
-Dice|24.008610010147
-DiContainer|24.062613964081
+Dice|236.91ms
+DiContainer|224.44ms
 
-### Inject itself into class 100000 times
+### Inject itself into class 1000 times
 Container | Time
 --- | ---
-Dice|0.10549187660217
-DiContainer|0.013836145401001
+Dice|1ms
+DiContainer|0.16ms

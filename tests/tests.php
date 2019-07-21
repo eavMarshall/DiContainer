@@ -13,50 +13,58 @@ use PHPUnit\Framework\TestCase;
 
 final class tests extends TestCase
 {
+    /** @var DIContainer */
+    private $dic;
+
+    protected function setUp(): void
+    {
+        $this->dic = new DIContainer();
+    }
+
     public function testGetSaveInstanceOfReturnsSameInstance()
     {
-        $instance1 = DIContainer::loadInstanceOf(ClassSingleInstance::class);
-        $instance2 = DIContainer::loadInstanceOf(ClassSingleInstance::class);
+        $instance1 = $this->dic->getInstanceOf(ClassSingleInstance::class);
+        $instance2 = $this->dic->getInstanceOf(ClassSingleInstance::class);
         self::assertSame($instance1, $instance2);
     }
 
     public function testGetInstanceOfReturnsNewInstances()
     {
-        $instance1 = DIContainer::loadInstanceOf(ClassWithoutDependencies::class);
-        $instance2 = DIContainer::loadInstanceOf(ClassWithoutDependencies::class);
+        $instance1 = $this->dic->getInstanceOf(ClassWithoutDependencies::class);
+        $instance2 = $this->dic->getInstanceOf(ClassWithoutDependencies::class);
         self::assertNotSame($instance1, $instance2);
     }
 
     public function testDependancyAreNewInstances()
     {
-        $instance1 = DIContainer::loadInstanceOf(ClassThatNeedsClassWithConstructorDependencies::class);
-        $instance2 = DIContainer::loadInstanceOf(ClassThatNeedsClassWithConstructorDependencies::class);
+        $instance1 = $this->dic->getInstanceOf(ClassThatNeedsClassWithConstructorDependencies::class);
+        $instance2 = $this->dic->getInstanceOf(ClassThatNeedsClassWithConstructorDependencies::class);
         self::assertNotSame($instance1->myDependency, $instance2->myDependency);
         self::assertNotSame($instance1, $instance2);
     }
 
     public function testDiContainerInsertsItselfAsADependancy()
     {
-        $instance1 = DIContainer::loadInstanceOf(ClassWithDiContainerDependency::class);
-        self::assertSame(DIContainer::getInstance(), $instance1->DIContainer);
+        $instance1 = $this->dic->getInstanceOf(ClassWithDiContainerDependency::class);
+        self::assertSame($this->dic, $instance1->DIContainer);
     }
 
     public function testDiContainerReturnsNewInstanceWhenImplementingNewInstance()
     {
-        $instance1 = DIContainer::loadInstanceOf(ClassNewAndSingleInstance::class);
-        $instance2 = DIContainer::loadInstanceOf(ClassNewAndSingleInstance::class);
+        $instance1 = $this->dic->getInstanceOf(ClassNewAndSingleInstance::class);
+        $instance2 = $this->dic->getInstanceOf(ClassNewAndSingleInstance::class);
         self::assertNotSame($instance1, $instance2);
     }
 
     public function testSessionInfoIsUpdatedInInstance()
     {
         $quote = 'get to the choppa';
-        $sessionInfo = DIContainer::loadInstanceOf(SessionInfo::class);
+        $sessionInfo = $this->dic->getInstanceOf(SessionInfo::class);
         $sessionInfo->sessionField1 = $quote;
-        $instance1 = DIContainer::loadInstanceOf(ClassHoldingSessionInfoIsUpdated::class);
+        $instance1 = $this->dic->getInstanceOf(ClassHoldingSessionInfoIsUpdated::class);
         self::assertEquals($quote, $instance1->sessionInfo->sessionField1);
 
-        $instance2 = DIContainer::loadInstanceOf(ClassHoldingSessionInfoIsUpdated::class);
+        $instance2 = $this->dic->getInstanceOf(ClassHoldingSessionInfoIsUpdated::class);
         self::assertEquals($quote, $instance2->sessionInfo->sessionField1);
 
         $quote = "I don't have time to bleed";
@@ -65,15 +73,15 @@ final class tests extends TestCase
         self::assertEquals($quote, $instance2->sessionInfo->sessionField1);
 
         $quote = "There's something out there waiting for us, and it ain't no man";
-        DIContainer::loadInstanceOf(SessionInfo::class)->sessionField1 = $quote;
+        $this->dic->getInstanceOf(SessionInfo::class)->sessionField1 = $quote;
         self::assertEquals($quote, $instance1->sessionInfo->sessionField1);
         self::assertEquals($quote, $instance2->sessionInfo->sessionField1);
     }
 
     public function nestedTest()
     {
-        $instance1 = DIContainer::loadInstanceOf(top::class);
-        $instance2 = DIContainer::loadInstanceOf(top::class);
+        $instance1 = $this->dic->getInstanceOf(top::class);
+        $instance2 = $this->dic->getInstanceOf(top::class);
         self::assertNotSame($instance1, $instance2);
         self::assertTrue(isset($instance1->level1a));
         self::assertTrue(isset($instance1->level1a->level2a));
@@ -82,5 +90,26 @@ final class tests extends TestCase
         self::assertTrue(isset($instance1->level1b->level2c));
         self::assertTrue(isset($instance1->level1b->level2d));
         self::assertFalse(isset($instance1->level1b->level2d->nothingHere));
+    }
+
+    public function testNewInstanceWithParams()
+    {
+        $message = 'this is a message from my new exception';
+        $exception =  $this->dic->getInstanceOf(Exception::class, [$message]);
+
+        self::assertEquals($message, $exception->getMessage());
+    }
+
+    public function testApplyingRuleReturnsNewObject()
+    {
+        $ruleDic = $this->dic->addOverrideRule(Exception::class, function() {
+            return new InvalidArgumentException();
+        });
+
+        self::assertNotSame($this->dic, $ruleDic);
+        $nonRuleType = $this->dic->getInstanceOf(Exception::class, ['test']);
+        $ruleType = $ruleDic->getInstanceOf(Exception::class, ['test']);
+        self::assertTrue($nonRuleType instanceof Exception);
+        self::assertTrue($ruleType instanceof InvalidArgumentException);
     }
 }

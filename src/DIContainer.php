@@ -5,6 +5,7 @@
  * @license    MIT
  * @version    1.0
  */
+
 namespace Di;
 
 use Exception;
@@ -12,22 +13,20 @@ use ReflectionClass;
 
 class DIContainer
 {
-    public function resetOverrideRules()
-    {
-        $this->overrideRules = [];
-        $this->addOverrideRule( self::class, function () { return self::getInstance(); });
-        //$this->addOverrideRule( MySingleton::class, function () { return MySingleton::getInstance(); });
-    }
-
     private static $thisInstance;
     private $overrideRules = [];
     private $implementsNewInstanceCache = [];
     private $singeInstancesCache = [];
     private $constructorCache = [];
 
-    protected function __construct()
+    public function __construct($overrideRules = [])
     {
-        $this->resetOverrideRules();
+        $that = $this;
+        $this->overrideRules[self::class] = static function () use ($that) {
+            return $that;
+        };
+        unset($overrideRules[self::class]);
+        $this->overrideRules = array_merge($this->overrideRules, $overrideRules);
     }
 
     public static function getInstance()
@@ -46,27 +45,49 @@ class DIContainer
         return self::getInstance()->getInstanceOf($class);
     }
 
+    /**
+     * This function is only here to help testing.
+     * DiContainer rules are immutable. This is to prevent someone from adding a rule in production code. When a
+     * rule is added, a new instance of DIContainer is returned with the new rule.
+     * In production a containers should only ever had 1 rule, return itself if an instance of itself is required
+     *
+     * @param $class
+     * @param $overrideFunction
+     * @return DIContainer
+     */
     public function addOverrideRule($class, $overrideFunction)
     {
-        $this->overrideRules[$class] = $overrideFunction;
+        $newRule = [];
+        $newRule[$class] = $overrideFunction;
+        $newRule = array_merge($this->overrideRules, $newRule);
+        return new self($newRule);
     }
 
-    public function getInstanceOf($class)
+    public function getInstanceOf($class, array $parameters = null)
     {
-        if (isset($this->singeInstancesCache[$class])) {
-            return $this->singeInstancesCache[$class];
+        if (isset($this->overrideRules[$class])) {
+            return $this->overrideRules[$class]();
         }
 
-        $instance = $this->createNewClassInstance($class);
+        if ($parameters === null) {
+            if (isset($this->singeInstancesCache[$class])) {
+                return $this->singeInstancesCache[$class];
+            }
 
-        if ($this->implementsNewInstanceCache[$class] !== false) {
-            $this->singeInstancesCache[$class] = $instance;
+            $instance = $this->createNewClassInstance($class);
+
+            if ($this->implementsNewInstanceCache[$class] !== false) {
+                $this->singeInstancesCache[$class] = $instance;
+            }
+
+            return $instance;
         }
 
-        return $instance;
+        return new $class(...$parameters);
     }
 
-    private function createNewClassInstance($class) {
+    private function createNewClassInstance($class)
+    {
         $params = $this->getParams($class);
         if (empty($params)) {
             return new $class();

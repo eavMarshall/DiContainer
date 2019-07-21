@@ -1,6 +1,7 @@
 <?php
 
 use Di\DIContainer;
+use Di\SessionInfo;
 use Dice\Dice;
 use tests\testClasses\ClassHoldingSessionInfoIsUpdated;
 use tests\testClasses\ClassWithDiContainerDependency;
@@ -9,31 +10,30 @@ use PHPUnit\Framework\TestCase;
 
 final class performanceTests extends TestCase
 {
-    const REPEAT = 10000;
+    const REPEAT = 100000;
 
     public function testDiceVsDiComponent()
     {
         $dice = new Dice();
-        $containersToTest = ['dice' => $dice, 'diContainer' => DIContainer::getInstance()];
 
-        $this->runTestOutput(
-            'Create class A ' . self::REPEAT . ' times',
-            $containersToTest,
-            'A'
-        );
+        printf("### A - Z tests\nThis test creates classes A - Z. Class B has a dependency on A, Class C has a" .
+        " dependency on C, all the way down to Z");
+        printf("\nClass | Dice | DIContainer\n");
+        printf('--- | --- | ---');
+
+        $letters = range('A', 'Z');
+        $previousLetter =  null;
+        foreach ($letters as $letter) {
+            $this->runAToZTest(
+                ['dice' => $dice, 'diContainer' => DIContainer::getInstance()],
+                $letter
+            );
+        }
+        printf("\n");
 
         $dice = new Dice();
-        $containersToTest = ['dice' => $dice, 'diContainer' => DIContainer::getInstance()];
-
-        $this->runTestOutput(
-            'Create class J ' . self::REPEAT . ' times',
-            $containersToTest,
-            'J'
-        );
-
-        $dice = new Dice();
-        $containersToTest = ['dice' => $dice, 'diContainer' => DIContainer::getInstance()];
         $dice = $dice->addRule(Di\SessionInfo::class, ['shared' => true]);
+        $containersToTest = ['dice' => $dice, 'diContainer' => DIContainer::getInstance()];
         $this->runTestOutput(
             'Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated ' . self::REPEAT . ' times',
             $containersToTest,
@@ -49,7 +49,9 @@ final class performanceTests extends TestCase
         );
 
         printf("\n");
-        printf('Inject itself into class ' . self::REPEAT . ' times');
+        printf('Inject itself into class ' . self::REPEAT . " times\n");
+        printf("Container | Time\n");
+        printf('--- | ---');
         $dice = new Dice();
         $dice = $dice->addRule(Dice::class, ['shared' => true]);
         $dice->create(Dice::class);
@@ -71,24 +73,12 @@ final class performanceTests extends TestCase
 
     private function runDiContainerTimer($container, $class)
     {
-        $a = $container->getInstanceOf($class);
-        $t1 = microtime(true);
-        for ($i = 0; $i < self::REPEAT; $i++) {
-            $a = $container->getInstanceOf($class);
-        }
-        $t2 = microtime(true);
-        printf('DiContainer|' . ($t2 - $t1));
+        printf('DiContainer|' . $this->runDiContainerTimerNoPrint($container, $class));
     }
 
     private function runDiceTimer($container, $class)
     {
-        $a = $container->create($class);
-        $t1 = microtime(true);
-        for ($i = 0; $i < self::REPEAT; $i++) {
-            $a = $container->create($class);
-        }
-        $t2 = microtime(true);
-        printf('Dice|' . ($t2 - $t1));
+        printf('Dice|' . $this->runDiceTimerNoPrint($container, $class));
     }
 
     private function runTestOutput($title, array $containers, $class)
@@ -96,7 +86,7 @@ final class performanceTests extends TestCase
         if ($title !== null) {
             printf("\n");
             printf("### {$title}");
-            printf("Container | Time\n");
+            printf("\nContainer | Time\n");
             printf('--- | ---');
         }
         foreach ($containers as $name => $container) {
@@ -111,78 +101,65 @@ final class performanceTests extends TestCase
             printf("\n");
         }
     }
+
+    private function runDiContainerTimerNoPrint($container, $class)
+    {
+        $a = $container->getInstanceOf($class);
+        $t1 = microtime(true);
+        for ($i = 0; $i < self::REPEAT; $i++) {
+            $a = $container->getInstanceOf($class);
+        }
+        $t2 = microtime(true);
+        return $t2 - $t1;
+    }
+
+    private function runDiceTimerNoPrint($container, $class)
+    {
+        $a = $container->create($class);
+        $t1 = microtime(true);
+        for ($i = 0; $i < self::REPEAT; $i++) {
+            $a = $container->create($class);
+        }
+        $t2 = microtime(true);
+        return $t2 - $t1;
+    }
+
+    private function runAToZTest(array $containers, $class)
+    {
+        printf("\n{$class}");
+        foreach ($containers as $name => $container) {
+            if ($name === 'dice') {
+                printf("|{$this->runDiceTimerNoPrint($container, $class)}");
+            } else {
+                printf("|{$this->runDiContainerTimerNoPrint($container, $class)}");
+            }
+        }
+    }
 }
 
 class A {
 
 }
-class B {
-    public $a;
 
-    public function __construct(A $a) {
-        $this->a = $a;
+$letters = range('A', 'Z');
+$previousLetter =  null;
+foreach ($letters as $letter) {
+    if ($previousLetter === null) {
+        $previousLetter = $letter;
+        continue;
     }
-}
-class C {
-    public $b;
+    eval("
+        class {$letter}
+        { 
+            public \$parent;
 
-    public function __construct(B $b) {
-        $this->b = $b;
-    }
-}
-class D {
-    public $c;
+            public function __construct({$previousLetter} \$parent) {
+                \$this->parent = \$parent;
+            }
+        }
+    ");
 
-    public function __construct(C $c) {
-        $this->c = $c;
-    }
-}
-class E {
-    public $d;
-
-    public function __construct(D $d) {
-        $this->d = $d;
-    }
-}
-class F {
-    public $e;
-
-    public function __construct(E $e) {
-        $this->e = $e;
-    }
-}
-class G {
-    public $f;
-    public function __construct(F $f) {
-        $this->f = $f;
-    }
-}
-class H {
-    public $g;
-    public function __construct(G $g) {
-        $this->g = $g;
-    }
-}
-class I {
-    public $h;
-    public function __construct(H $h) {
-        $this->h = $h;
-    }
-}
-class J {
-    public $i;
-    public function __construct(I $i) {
-        $this->i = $i;
-    }
-}
-class K
-{
-    public $j;
-
-    public function __construct(K $k)
-    {
-        $this->k = $k;
-    }
+    $previousLetter = $letter;
 }
 
 class DiceDependency

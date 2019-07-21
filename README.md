@@ -1,5 +1,5 @@
 # DiContainer
-Super simple dependency injection container for PHP 7
+Super simple dependency injection container for PHP 5.6
 
 #### How to start
 ```
@@ -11,19 +11,20 @@ $myClass = $diContainer->getInstanceOf(MyClass::class);
 - Immutable
 - Rule free
 - Work immediately with no setup
-- Help remove the singleton pattern by have share instances defined by implementing the SingleInstance interface
+- Help remove the singleton pattern
 - Testing friendly, easily swapping instances for mock/stubs
 
 ##### Immutable?
-In php you don't have a truly immutable object. There is some state held by the object. This state are the class names and keeping track of classes that implement the SingleInstance interface.
-These values can never change while your application is running. This could be considered as immutable state.
+In php you don't have a truly immutable object. The container always holds some state. This state is made of the caches of classes that implements SingleInstance and the overriding rules.
+The class definitions can not change while your application is running, and override rules can not be change once the container is instantiated.
+So there could be a strong argument that the container is immutable.
 
 ##### Rule free?
 Every container I've come across implements some sort of rule system. A rule system that needs to be loaded each and every time you run your application.
-By labeling classes with an empty, but known interface, we can tag shared instances of classes without having to have a rule system.
+We can tag shared instances of classes without having to have a rule system by labeling classes with an empty, but known, interface.
 
 ##### Work immediately with no setup?
-There are some containers that require some complex setup. Usually with json, xml or an array.
+There are some containers that require complex setup. Usually with json, xml or an array.
 If you have an autoloader setup, a fully functioning container can be achieved without any setup.
 ```
 class DatabaseConnection implements SingleInstance
@@ -47,7 +48,8 @@ $instance1 = $diContainer->getInstanceOf(MyEndPoint::class);
 ```
 The instance of MyEndPoint will have the DatabaseConnection injected into it's constructor automagically
 
-##### Help remove the singleton pattern by have share instances defined by implementing the SingleInstance interface ?
+##### Help remove the singleton pattern
+This can be achieved by implementing SingleInstance interface to define share instances.
 Wrapping the singleton in a class that implements SingleInstance will allow you to request an instance directly from the container, or pass through a constructor of a instance instantiated via the container
 In the example above, notice DatabaseConnection implements SingleInstance
 ```

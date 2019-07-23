@@ -22,6 +22,7 @@ So there could be a strong argument that the container is immutable.
 ##### Rule free?
 Every container I've come across implements some sort of rule system. A rule system that needs to be loaded each and every time you run your application.
 We can tag shared instances of classes without having to have a rule system by labeling classes with an empty, but known, interface.
+see [Help remove the singleton pattern](https://github.com/eavMarshall/DiContainer#help-remove-the-singleton-pattern)
 
 ##### Work immediately with no setup?
 There are some containers that require complex setup. Usually with json, xml or an array.

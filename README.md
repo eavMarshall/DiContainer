@@ -2,7 +2,7 @@
 Super simple dependency injection container for PHP 7
 
 #### How to start
-```
+```php
 $diContainer = new DIContainer();
 $myClass = $diContainer->getInstanceOf(MyClass::class);
 ```
@@ -27,7 +27,7 @@ See [Help remove the singleton pattern](https://github.com/eavMarshall/DiContain
 ##### Work immediately with no setup?
 There are some containers that require complex setup. Usually with json, xml or an array.
 If you have an autoloader setup, a fully functioning container can be achieved without any setup.
-```
+```php
 class DatabaseConnection implements SingleInstance
 {
     public function getMyDatabaseConnection()
@@ -53,7 +53,7 @@ The instance of MyEndPoint will have the DatabaseConnection injected into it's c
 This can be achieved by implementing SingleInstance interface to define share instances.
 Wrapping the singleton in a class that implements SingleInstance will allow you to request an instance directly from the container, or pass through a constructor of a instance instantiated via the container
 In the example above, notice DatabaseConnection implements SingleInstance
-```
+```php
 $diContainer = new DIContainer();
 $instance1 = $diContainer->getInstanceOf(DatabaseConnection::class);
 $instance2 = $diContainer->getInstanceOf(DatabaseConnection::class);
@@ -63,7 +63,7 @@ assertSame($instance1, $instance2); //passes
 
 ##### Testing friendly, easily swapping instances for mock/stubs
 If we wanted to stub out all DatabaseConnection to return a mock. Adding an override rule will replace all instances of your chosen class
-```
+```php
 $databaseConnectionMock = $this->getMockBuilder(DatabaseConnection::class)
     ->setMethods([ 'getMyDatabaseConnection' ])
     ->getMock();

@@ -1,5 +1,5 @@
 # DiContainer
-Super simple dependency injection container for PHP 7
+DiContainer is a lightweight dependency injection container for PHP 7
 
 #### How to start
 ```php

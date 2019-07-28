@@ -112,4 +112,10 @@ final class tests extends TestCase
         self::assertTrue($nonRuleType instanceof Exception);
         self::assertTrue($ruleType instanceof InvalidArgumentException);
     }
+
+    public function testUnknownTypeGetsPassedANull()
+    {
+        $exception =  $this->dic->getInstanceOf(Exception::class);
+        self::assertTrue($exception instanceof Exception);
+    }
 }

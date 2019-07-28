@@ -19,14 +19,14 @@ final class performanceTests extends TestCase
 
         printf("### A - Z tests\nThis test creates classes A - Z. Class B has a dependency on A, Class C has a" .
             " dependency on B, all the way down to Z");
-        printf("\n\nClass | Dice | DIContainer\n");
-        printf('--- | --- | ---');
+        printf("\n\nClass | Dice | DIContainer | Boiler plate\n");
+        printf('--- | --- | --- | ---');
 
         $letters = range('A', 'Z');
         $previousLetter =  null;
         foreach ($letters as $letter) {
             $this->runAToZTest(
-                ['dice' => $dice, 'diContainer' => $diContainer],
+                ['dice' => $dice, 'diContainer' => $diContainer, 'function' => "createClass{$letter}"],
                 $letter
             );
         }
@@ -59,6 +59,24 @@ final class performanceTests extends TestCase
             . "\nThis class has a dependency on all the A - Z classes\n",
             $containersToTest,
             'AllClassesAToZDependencies'
+        );
+
+        $dice = new Dice();
+        $containersToTest = ['dice' => $dice];
+        $this->runTestOutput(
+            'Create AllClassesAToZDependenciesWithDice ' . self::REPEAT . ' times'
+            . "\nThis class has a dependency on dice, a single instance and AllClassesAToZDependencies\n",
+            $containersToTest,
+            'AllClassesAToZDependenciesWithDice'
+        );
+
+        $diContainer = new DIContainer();
+        $containersToTest = ['diContainer' => $diContainer];
+        $this->runTestOutput(
+            'Create AllClassesAToZDependencies ' . self::REPEAT . ' times'
+            . "\nThis class has a dependency on DIContainer, a single instance and AllClassesAToZDependenciesWithDiContainer\n",
+            $containersToTest,
+            'AllClassesAToZDependenciesWithDiContainer'
         );
 
         printf("\n");
@@ -138,14 +156,24 @@ final class performanceTests extends TestCase
         return round(($t2 - $t1) * 1000.0, 2);
     }
 
+    private function runTestFunctionWithNoOutput($function)
+    {
+        $t1 = microtime(true);
+        for ($i = 0; $i < self::REPEAT; $i++) {
+            $a = $function();
+        }
+        $t2 = microtime(true);
+        return round(($t2 - $t1) * 1000.0, 2);
+    }
+
     private function runAToZTest(array $containers, $class)
     {
         printf("\n{$class}");
         foreach ($containers as $name => $container) {
-            if ($name === 'dice') {
-                printf("|{$this->runDiceTimerNoPrint($container, $class)}ms");
-            } else {
-                printf("|{$this->runDiContainerTimerNoPrint($container, $class)}ms");
+            switch($name) {
+                case 'function': printf("|{$this->runTestFunctionWithNoOutput($container)}ms"); break;
+                case 'dice': printf("|{$this->runDiceTimerNoPrint($container, $class)}ms"); break;
+                default: printf("|{$this->runDiContainerTimerNoPrint($container, $class)}ms");
             }
         }
     }
@@ -186,6 +214,20 @@ foreach ($letters as $letter) {
     $level1Assignments .= "\$this->{$letter} = \${$letter}; ";
 }
 
+$createClassString = '';
+foreach ($letters as $letter) {
+    if ($letter === 'A') {
+        $createClassString = "new {$letter}()";
+    } else {
+        $createClassString = "new {$letter}({$createClassString})";
+    }
+    eval("
+    function createClass{$letter}() {
+        return {$createClassString};
+    }
+");
+}
+
 $level1ConstructorArguments = substr($level1ConstructorArguments, 0, -2);
 $level1Fields = substr($level1Fields, 0, -2);
 
@@ -195,6 +237,40 @@ eval("
         private {$level1Fields};
         public function __construct({$level1ConstructorArguments}) {
             {$level1Assignments}
+        }
+    }
+");
+
+$singleInstanceClassName = ClassSingleInstance::class;
+$diceClassName = Dice::class;
+$diContainerName = DIContainer::class;
+
+eval("
+    class AllClassesAToZDependenciesWithDice
+    { 
+        private \$allABToZ;
+        private \$dice;
+        private \$singleInstanceClassName;
+        
+        public function __construct({$diceClassName} \$dice, \$singleInstanceClassName, AllClassesAToZDependencies \$allABToZ) {
+            \$this->allABToZ = \$allABToZ;
+            \$this->dice = \$dice;
+            \$this->singleInstanceClassName = \$singleInstanceClassName;
+        }
+    }
+");
+
+eval("
+    class AllClassesAToZDependenciesWithDiContainer
+    { 
+        private \$allABToZ;
+        private \$diContainerName;
+        private \$singleInstanceClassName;
+        
+        public function __construct({$diContainerName} \$diContainerName, \$singleInstanceClassName, AllClassesAToZDependencies \$allABToZ) {
+            \$this->allABToZ = \$allABToZ;
+            \$this->diContainerName = \$diContainerName;
+            \$this->singleInstanceClassName = \$singleInstanceClassName;
         }
     }
 ");

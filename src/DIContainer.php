@@ -65,6 +65,10 @@ class DIContainer
 
     public function getInstanceOf($class, array $parameters = null)
     {
+        if ($class === null) {
+            return null;
+        }
+
         if (isset($this->overrideRules[$class])) {
             return $this->overrideRules[$class]();
         }
@@ -120,7 +124,8 @@ class DIContainer
         $this->constructorCache[$classPath] = [];
         $initialParamInstances = [];
         foreach ($parameters as $parameter) {
-            $initialParamInstances[] = $this->getParamInstance($this->constructorCache[$classPath][] = $parameter->getType()->getName());
+            $type = $parameter->getType();
+            $initialParamInstances[] = $this->getParamInstance($this->constructorCache[$classPath][] = $type ? $type->getName() : null);
         }
 
         return $initialParamInstances;

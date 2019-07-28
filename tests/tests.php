@@ -102,20 +102,21 @@ final class tests extends TestCase
 
     public function testApplyingRuleReturnsNewObject()
     {
-        $ruleDic = $this->dic->addOverrideRule(Exception::class, function() {
+        $ruleDic = $this->dic->addOverrideRule(Exception::class, static function() {
             return new InvalidArgumentException();
         });
 
         self::assertNotSame($this->dic, $ruleDic);
         $nonRuleType = $this->dic->getInstanceOf(Exception::class, ['test']);
         $ruleType = $ruleDic->getInstanceOf(Exception::class, ['test']);
-        self::assertTrue($nonRuleType instanceof Exception);
-        self::assertTrue($ruleType instanceof InvalidArgumentException);
+
+        self::assertInstanceOf(Exception::class, $nonRuleType);
+        self::assertInstanceOf(InvalidArgumentException::class, $ruleType);
     }
 
     public function testUnknownTypeGetsPassedANull()
     {
         $exception =  $this->dic->getInstanceOf(Exception::class);
-        self::assertTrue($exception instanceof Exception);
+        self::assertInstanceOf(Exception::class, $exception);
     }
 }

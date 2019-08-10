@@ -14,10 +14,6 @@ final class performanceTests extends TestCase
 
     public function testDiceVsDiComponent()
     {
-        $dice = new Dice();
-        $diContainer = new DIContainer();
-        $phpDi = new Container();
-
         printf("### A - Z tests\nThis test creates classes A - Z. Class B has a dependency on A, Class C has a" .
             " dependency on B, all the way down to Z");
         printf("\n\nClass | Dice | DIContainer | PHP-DI | Boiler plate\n");
@@ -28,9 +24,9 @@ final class performanceTests extends TestCase
         foreach ($letters as $letter) {
             $this->runAToZTest(
                 [
-                    'dice' => $dice,
-                    'diContainer' => $diContainer,
-                    'phpDi' => $phpDi,
+                    'dice' => new Dice(),
+                    'diContainer' => new DIContainer(),
+                    'phpDi' => new Container(),
                     'function' => "createClass{$letter}",
                 ],
                 $letter

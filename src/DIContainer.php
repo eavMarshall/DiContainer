@@ -65,7 +65,7 @@ class DIContainer
 
     public function getInstanceOf($class, array $parameters = null)
     {
-        if ($class === null) {
+        if (!$class) {
             return null;
         }
 
@@ -113,8 +113,8 @@ class DIContainer
         $reflectionClass = new ReflectionClass($classPath);
         $constructor = $reflectionClass->getConstructor();
 
-        $this->implementsNewInstanceCache[$classPath] = !$reflectionClass->implementsInterface(NewInstance::class)
-            && $reflectionClass->implementsInterface(SingleInstance::class);
+        $this->implementsNewInstanceCache[$classPath]
+            = $reflectionClass->implementsInterface(SingleInstance::class);
 
         if ($constructor === null) {
             return $this->constructorCache[$classPath] = [];

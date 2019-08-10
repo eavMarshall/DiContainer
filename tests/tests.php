@@ -49,13 +49,6 @@ final class tests extends TestCase
         self::assertSame($this->dic, $instance1->DIContainer);
     }
 
-    public function testDiContainerReturnsNewInstanceWhenImplementingNewInstance()
-    {
-        $instance1 = $this->dic->getInstanceOf(ClassNewAndSingleInstance::class);
-        $instance2 = $this->dic->getInstanceOf(ClassNewAndSingleInstance::class);
-        self::assertNotSame($instance1, $instance2);
-    }
-
     public function testSessionInfoIsUpdatedInInstance()
     {
         $quote = 'get to the choppa';

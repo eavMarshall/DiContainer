@@ -105,69 +105,69 @@ This test creates classes A - Z. Class B has a dependency on A, Class C has a de
 
 Class | Dice | DIContainer | Boiler plate
 --- | --- | --- | ---
-A|0.28ms|0.37ms|0.18ms
-B|1.37ms|1.13ms|0.28ms
-C|1.67ms|1.62ms|0.39ms
-D|2.31ms|2.25ms|0.54ms
-E|2.94ms|2.8ms|0.64ms
-F|4.8ms|3.91ms|0.79ms
-G|4.25ms|4.1ms|0.87ms
-H|5.45ms|4.65ms|0.98ms
-I|6.3ms|6.44ms|1.12ms
-J|6.34ms|5.94ms|1.3ms
-K|6.92ms|11.04ms|1.93ms
-L|13.49ms|12.74ms|2.03ms
-M|13.9ms|12.98ms|2.74ms
-N|9.97ms|9.11ms|1.91ms
-O|9.44ms|8.85ms|1.67ms
-P|10.86ms|9.53ms|1.74ms
-Q|11.17ms|10.13ms|1.81ms
-R|11.81ms|10.63ms|1.86ms
-S|12.02ms|11.22ms|2.44ms
-T|17.3ms|12.67ms|2.08ms
-U|13.63ms|12.93ms|2.39ms
-V|14.58ms|17.99ms|3.44ms
-W|26.61ms|15.06ms|2.44ms
-X|15.71ms|16.66ms|3.96ms
-Y|28ms|22.52ms|2.66ms
-Z|17.37ms|15.5ms|2.76ms
+A|0.28ms|0.34ms|0.16ms
+B|0.96ms|1.03ms|0.27ms
+C|1.61ms|1.71ms|0.37ms
+D|2.23ms|2.12ms|0.49ms
+E|2.88ms|2.96ms|0.57ms
+F|3.52ms|3.39ms|0.68ms
+G|4.66ms|4.33ms|1.25ms
+H|4.98ms|4.59ms|0.89ms
+I|5.77ms|5.31ms|0.99ms
+J|6.24ms|6.25ms|1.08ms
+K|6.96ms|6.94ms|1.41ms
+L|7.76ms|9.07ms|1.31ms
+M|8.47ms|8.32ms|1.42ms
+N|9.83ms|8.75ms|1.56ms
+O|9.39ms|8.93ms|1.63ms
+P|10.06ms|10.5ms|6.02ms
+Q|20.14ms|18.22ms|1.82ms
+R|11.58ms|11.3ms|2.27ms
+S|12.55ms|13.06ms|3.73ms
+T|21.19ms|20.49ms|3.33ms
+U|23.79ms|22.09ms|3.52ms
+V|22.79ms|13.64ms|2.5ms
+W|14.81ms|13.4ms|2.43ms
+X|15.99ms|14.54ms|2.59ms
+Y|18.3ms|17.87ms|4.82ms
+Z|26.1ms|16.09ms|2.91ms
 
 ### Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated 1000 times
 Container | Time
 --- | ---
-Dice|1.09ms
-DiContainer|0.81ms
+Dice|1.55ms
+DiContainer|0.84ms
 
 ### Create instance 3 level deep x2 each layer 1000 times
 Container | Time
 --- | ---
-Dice|4.5ms
-DiContainer|4.56ms
+Dice|4.45ms
+DiContainer|4.67ms
 
 ### Create AllClassesAToZDependencies 1000 times
 This class has a dependency on all the A - Z classes
 
 Container | Time
 --- | ---
-Dice|250.29ms
-DiContainer|253.35ms
+Dice|308.55ms
+DiContainer|221.05ms
 
 ### Create AllClassesAToZDependenciesWithDice 1000 times
 This class has a dependency on dice, a single instance and AllClassesAToZDependencies
 
 Container | Time
 --- | ---
-Dice|301.24ms
+Dice|234.36ms
 
 ### Create AllClassesAToZDependencies 1000 times
 This class has a dependency on DIContainer, a single instance and AllClassesAToZDependenciesWithDiContainer
 
 Container | Time
 --- | ---
-DiContainer|213.8ms
+DiContainer|222.52ms
 
 ### Inject itself into class 1000 times
 Container | Time
 --- | ---
-Dice|1ms
+Dice|1.04ms
 DiContainer|0.14ms

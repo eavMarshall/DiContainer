@@ -15,7 +15,7 @@ class DIContainer
 {
     private static $thisInstance;
     private $overrideRules = [];
-    private $implementsNewInstanceCache = [];
+    private $implementsSingleInstanceCache = [];
     private $singeInstancesCache = [];
     private $constructorCache = [];
 
@@ -80,7 +80,7 @@ class DIContainer
 
             $instance = new $class(...$this->getParams($class));
 
-            if ($this->implementsNewInstanceCache[$class] !== false) {
+            if ($this->implementsSingleInstanceCache[$class] !== false) {
                 $this->singeInstancesCache[$class] = $instance;
             }
 
@@ -102,7 +102,7 @@ class DIContainer
 
         $paramInstances = [];
         foreach ($this->constructorCache[$classPath] as $type) {
-            $paramInstances[] = $this->getParamInstance($type);
+            $paramInstances[] = $this->getInstanceOf($type);
         }
 
         return $paramInstances;
@@ -113,7 +113,7 @@ class DIContainer
         $reflectionClass = new ReflectionClass($classPath);
         $constructor = $reflectionClass->getConstructor();
 
-        $this->implementsNewInstanceCache[$classPath]
+        $this->implementsSingleInstanceCache[$classPath]
             = $reflectionClass->implementsInterface(SingleInstance::class);
 
         if ($constructor === null) {
@@ -125,19 +125,9 @@ class DIContainer
         $initialParamInstances = [];
         foreach ($parameters as $parameter) {
             $type = $parameter->getType();
-            $initialParamInstances[] = $this->getParamInstance($this->constructorCache[$classPath][] = $type ? $type->getName() : null);
+            $initialParamInstances[] = $this->getInstanceOf($this->constructorCache[$classPath][] = $type ? $type->getName() : null);
         }
 
         return $initialParamInstances;
-    }
-
-    private function getParamInstance($type)
-    {
-        return $this->getOverrideRules($type) ?: $this->getInstanceOf($type);
-    }
-
-    private function getOverrideRules($type)
-    {
-        return isset($this->overrideRules[$type]) ? $this->overrideRules[$type]() : [];
     }
 }

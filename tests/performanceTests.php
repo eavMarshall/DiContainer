@@ -1,8 +1,8 @@
 <?php
 
 use Di\DIContainer;
-use Di\SessionInfo;
 use Dice\Dice;
+use DI\Container;
 use tests\testClasses\ClassHoldingSessionInfoIsUpdated;
 use tests\testClasses\ClassWithDiContainerDependency;
 use tests\testClasses\nested\top;
@@ -16,17 +16,23 @@ final class performanceTests extends TestCase
     {
         $dice = new Dice();
         $diContainer = new DIContainer();
+        $phpDi = new Container();
 
         printf("### A - Z tests\nThis test creates classes A - Z. Class B has a dependency on A, Class C has a" .
             " dependency on B, all the way down to Z");
-        printf("\n\nClass | Dice | DIContainer | Boiler plate\n");
-        printf('--- | --- | --- | ---');
+        printf("\n\nClass | Dice | DIContainer | PHP-DI | Boiler plate\n");
+        printf('--- | --- | --- | --- | ---');
 
         $letters = range('A', 'Z');
         $previousLetter =  null;
         foreach ($letters as $letter) {
             $this->runAToZTest(
-                ['dice' => $dice, 'diContainer' => $diContainer, 'function' => "createClass{$letter}"],
+                [
+                    'dice' => $dice,
+                    'diContainer' => $diContainer,
+                    'phpDi' => $phpDi,
+                    'function' => "createClass{$letter}",
+                ],
                 $letter
             );
         }
@@ -53,7 +59,8 @@ final class performanceTests extends TestCase
 
         $dice = new Dice();
         $diContainer = new DIContainer();
-        $containersToTest = ['dice' => $dice, 'diContainer' => $diContainer];
+        $phpDi = new Container();
+        $containersToTest = ['dice' => $dice, 'diContainer' => $diContainer, 'PHP-DI' => $phpDi];
         $this->runTestOutput(
             'Create AllClassesAToZDependencies ' . self::REPEAT . ' times'
             . "\nThis class has a dependency on all the A - Z classes\n",
@@ -108,6 +115,13 @@ final class performanceTests extends TestCase
         printf("DiContainer|{$this->runDiContainerTimerNoPrint($container, $class)}ms");
     }
 
+    private function runPHPDITimer($container, $class)
+    {
+        printf("PHP DI|{$this->runPHPDITimerNoPrint($container, $class)}ms");
+    }
+
+
+
     private function runDiceTimer($container, $class)
     {
         printf("Dice|{$this->runDiceTimerNoPrint($container, $class)}ms");
@@ -125,13 +139,26 @@ final class performanceTests extends TestCase
             printf("\n");
             if ($name === 'dice') {
                 $this->runDiceTimer($container, $class);
-            } else {
+            } else if ($name === 'diContainer') {
                 $this->runDiContainerTimer($container, $class);
+            } else {
+                $this->runPHPDITimer($container, $class);
             }
         }
         if ($title !== null) {
             printf("\n");
         }
+    }
+
+    private function runPHPDITimerNoPrint($container, $class)
+    {
+        $a = $container->make($class);
+        $t1 = microtime(true);
+        for ($i = 0; $i < self::REPEAT; $i++) {
+            $a = $container->make($class);
+        }
+        $t2 = microtime(true);
+        return round(($t2 - $t1) * 1000.0, 2);
     }
 
     private function runDiContainerTimerNoPrint($container, $class)
@@ -173,7 +200,9 @@ final class performanceTests extends TestCase
             switch($name) {
                 case 'function': printf("|{$this->runTestFunctionWithNoOutput($container)}ms"); break;
                 case 'dice': printf("|{$this->runDiceTimerNoPrint($container, $class)}ms"); break;
-                default: printf("|{$this->runDiContainerTimerNoPrint($container, $class)}ms");
+                case 'diContainer': printf("|{$this->runDiContainerTimerNoPrint($container, $class)}ms"); break;
+                default: printf("|{$this->runPHPDITimerNoPrint($container, $class)}ms");
+
             }
         }
     }

@@ -99,6 +99,7 @@ To run: vendor\bin\phpunit --bootstrap vendor\autoload.php tests\performanceTest
 
 Dice is super fast, doing some test against it seem like a good idea 
 (https://github.com/Level-2/Dice)
+PHP-DI is slow to start, but the more dependencys you have the better the performance (http://php-di.org/doc/php-definitions.html)
 
 ### A - Z tests
 This test creates classes A - Z. Class B has a dependency on A, Class C has a dependency on B, all the way down to Z

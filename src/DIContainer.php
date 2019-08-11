@@ -8,7 +8,6 @@
 
 namespace Di;
 
-use Exception;
 use ReflectionClass;
 
 class DIContainer
@@ -35,17 +34,6 @@ class DIContainer
     }
 
     /**
-     * Put here so developers don't have to call DIContainer::getInstance()->getInstanceOf(<<namespace class name>>)
-     * @param $class
-     * @return mixed
-     * @throws Exception
-     */
-    public static function loadInstanceOf($class)
-    {
-        return self::getInstance()->getInstanceOf($class);
-    }
-
-    /**
      * This function is only here to help testing.
      * DiContainer rules are immutable. This is to prevent someone from adding a rule in production code. When a
      * rule is added, a new instance of DIContainer is returned with the new rule.
@@ -65,7 +53,7 @@ class DIContainer
 
     public function getInstanceOf($class, array $parameters = null)
     {
-        if (!$class) {
+        if ($class === null) {
             return null;
         }
 

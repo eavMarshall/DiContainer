@@ -106,70 +106,70 @@ This test creates classes A - Z. Class B has a dependency on A, Class C has a de
 
 Class | Dice | DIContainer | PHP-DI | Boiler plate
 --- | --- | --- | --- | ---
-A|0.29ms|0.34ms|3.38ms|0.17ms
-B|0.97ms|0.83ms|3.24ms|0.28ms
-C|2.1ms|1.31ms|3.74ms|0.37ms
-D|2.29ms|1.76ms|3.25ms|0.49ms
-E|3.42ms|3.06ms|6.91ms|0.59ms
-F|3.74ms|2.77ms|3.3ms|0.68ms
-G|4.21ms|3.66ms|3.26ms|0.76ms
-H|4.93ms|3.63ms|3.25ms|0.87ms
-I|5.61ms|4.12ms|3.26ms|1ms
-J|6.42ms|4.6ms|4.23ms|1.5ms
-K|6.78ms|5.07ms|3.34ms|1.17ms
-L|7.61ms|5.61ms|3.27ms|1.27ms
-M|8.05ms|6.03ms|3.69ms|1.45ms
-N|8.67ms|6.64ms|4.64ms|1.51ms
-O|9.79ms|7.32ms|5.48ms|2.15ms
-P|17.59ms|13.31ms|5.77ms|2.64ms
-Q|18.63ms|14.6ms|5.41ms|2.8ms
-R|20.14ms|15.01ms|4.52ms|2.97ms
-S|21.46ms|15.88ms|5.43ms|3.1ms
-T|22.34ms|16.2ms|5ms|2.95ms
-U|23.02ms|10.06ms|4.74ms|3.5ms
-V|25.24ms|17.32ms|5.69ms|3.63ms
-W|26.81ms|18.32ms|3.52ms|3.77ms
-X|27.4ms|19.44ms|5.21ms|3.43ms
-Y|28.05ms|21.98ms|5.69ms|3.57ms
-Z|29.5ms|21.3ms|4.81ms|4.26ms
+A|0.3ms|0.29ms|2.25ms|0.16ms
+B|0.99ms|1.02ms|3.42ms|0.3ms
+C|1.74ms|1.2ms|3.4ms|0.37ms
+D|2.36ms|1.59ms|3.33ms|0.48ms
+E|2.87ms|2.01ms|3.52ms|0.61ms
+F|3.63ms|2.93ms|3.34ms|0.67ms
+G|4.65ms|2.94ms|3.77ms|0.76ms
+H|13.71ms|3.6ms|4ms|1ms
+I|5.65ms|3.81ms|3.69ms|1.11ms
+J|6.43ms|8.64ms|12.66ms|4.11ms
+K|21.58ms|7.64ms|3.4ms|1.17ms
+L|8.83ms|9.63ms|4.59ms|2.05ms
+M|29.76ms|9.9ms|5.12ms|2.17ms
+N|15.41ms|9.39ms|5.78ms|2.41ms
+O|15.41ms|10.53ms|5.79ms|2.16ms
+P|18.44ms|18.55ms|8.64ms|1.75ms
+Q|14.96ms|25.26ms|5.77ms|2.91ms
+R|20.69ms|14.81ms|5.49ms|1.96ms
+S|12.2ms|8.94ms|3.53ms|2.14ms
+T|12.58ms|9.5ms|3.63ms|2.12ms
+U|12.98ms|8.92ms|3.35ms|2.22ms
+V|13.69ms|9.7ms|3.86ms|2.37ms
+W|15.11ms|12.16ms|3.37ms|2.69ms
+X|15.58ms|10.81ms|3.59ms|2.69ms
+Y|15.64ms|11.85ms|3.53ms|2.74ms
+Z|17.83ms|11.45ms|3.35ms|2.75ms
 
 ### Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated 1000 times
 Container | Time
 --- | ---
-Dice|1.64ms
-DiContainer|1.31ms
+Dice|1.07ms
+DiContainer|0.7ms
 
 ### Create instance 3 level deep x2 each layer 1000 times
 Container | Time
 --- | ---
-Dice|6.51ms
-DiContainer|5.73ms
+Dice|4.01ms
+DiContainer|3.71ms
 
 ### Create AllClassesAToZDependencies 1000 times
 This class has a dependency on all the A - Z classes
 
 Container | Time
 --- | ---
-Dice|367.05ms
-DiContainer|339.44ms
-PHP DI|58.62ms
+Dice|258.45ms
+DiContainer|169.46ms
+PHP DI|22.35ms
 
 ### Create AllClassesAToZDependenciesWithDice 1000 times
 This class has a dependency on dice, a single instance and AllClassesAToZDependencies
 
 Container | Time
 --- | ---
-Dice|303.85ms
+Dice|241.51ms
 
 ### Create AllClassesAToZDependencies 1000 times
 This class has a dependency on DIContainer, a single instance and AllClassesAToZDependenciesWithDiContainer
 
 Container | Time
 --- | ---
-DiContainer|174.13ms
+DiContainer|184.07ms
 
 ### Inject itself into class 1000 times
 Container | Time
 --- | ---
-Dice|0.97ms
-DiContainer|0.14ms
+Dice|0.99ms
+DiContainer|0.15ms

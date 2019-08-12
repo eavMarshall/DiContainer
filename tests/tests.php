@@ -112,4 +112,11 @@ final class tests extends TestCase
         $exception =  $this->dic->getInstanceOf(Exception::class);
         self::assertInstanceOf(Exception::class, $exception);
     }
+
+    public function testClassNotExist()
+    {
+        $this->expectException(ReflectionException::class);
+        $this->expectExceptionMessage('Class This_is_a_class_that_does_not_exist does not exist');
+        $this->dic->getInstanceOf('This_is_a_class_that_does_not_exist');
+    }
 }

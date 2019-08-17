@@ -27,6 +27,14 @@ class DIContainer
         $this->overrideRules = array_merge($this->overrideRules, $overrideRules);
     }
 
+    /**
+     * Instead of creating a new instance of DIContainer, you should probably use this function get get your instance
+     * in your application code.
+     * This will help keep your single instances collection unique.
+     * In test code however, you should try and create a new DIContainer every test, to prevent your single instance
+     * state from spilling into another test
+     * @return DIContainer
+     */
     public static function getInstance()
     {
         return self::$thisInstance ?: self::$thisInstance = new self();
@@ -50,6 +58,13 @@ class DIContainer
         return new self($newRule);
     }
 
+    /**
+     * Function getInstanceOf creates a new instance of $class that do not implements SingleInstance interface
+     * Classes that implement single instance interface will have the same instance returned
+     * @param $class
+     * @param $parameters
+     * @return mixed|null
+     */
     public function getInstanceOf($class, array $parameters = null)
     {
         if ($class === null) {

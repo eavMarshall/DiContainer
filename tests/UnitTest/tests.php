@@ -118,4 +118,13 @@ final class tests extends TestCase
         $this->expectExceptionMessage('Class This_is_a_class_that_does_not_exist does not exist');
         $this->dic->getInstanceOf('This_is_a_class_that_does_not_exist');
     }
+
+    public function testGetInstanceReturnsTheSameDIContainer()
+    {
+        $firstCall = DIContainer::getInstance();
+        self::assertInstanceOf(DIContainer::class, $firstCall);
+
+        self::assertSame($firstCall, DIContainer::getInstance());
+        self::assertNotSame($this->dic, DIContainer::getInstance());
+    }
 }

@@ -1,15 +1,14 @@
 <?php
 
 use Di\DIContainer;
-use Di\SessionInfo;
+use PHPUnit\Framework\TestCase;
 use tests\testClasses\ClassHoldingSessionInfoIsUpdated;
-use tests\testClasses\ClassNewAndSingleInstance;
 use tests\testClasses\ClassSingleInstance;
 use tests\testClasses\ClassThatNeedsClassWithConstructorDependencies;
 use tests\testClasses\ClassWithDiContainerDependency;
 use tests\testClasses\ClassWithoutDependencies;
 use tests\testClasses\nested\top;
-use PHPUnit\Framework\TestCase;
+use tests\testClasses\SessionInfo;
 
 final class tests extends TestCase
 {
@@ -88,14 +87,14 @@ final class tests extends TestCase
     public function testNewInstanceWithParams()
     {
         $message = 'this is a message from my new exception';
-        $exception =  $this->dic->getInstanceOf(Exception::class, [$message]);
+        $exception = $this->dic->getInstanceOf(Exception::class, [$message]);
 
         self::assertEquals($message, $exception->getMessage());
     }
 
     public function testApplyingRuleReturnsNewObject()
     {
-        $ruleDic = $this->dic->addOverrideRule(Exception::class, static function() {
+        $ruleDic = $this->dic->addOverrideRule(Exception::class, static function () {
             return new InvalidArgumentException();
         });
 
@@ -109,7 +108,7 @@ final class tests extends TestCase
 
     public function testUnknownTypeGetsPassedANull()
     {
-        $exception =  $this->dic->getInstanceOf(Exception::class);
+        $exception = $this->dic->getInstanceOf(Exception::class);
         self::assertInstanceOf(Exception::class, $exception);
     }
 

@@ -1,5 +1,5 @@
 <?php
-namespace Di;
+namespace tests\testClasses;
 
 use Di\SingleInstance;
 

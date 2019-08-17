@@ -2,8 +2,6 @@
 
 namespace tests\testClasses;
 
-use Di\SessionInfo;
-
 class ClassHoldingSessionInfoIsUpdated
 {
     public $sessionInfo;

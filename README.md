@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/eavMarshall/DiContainer/badge.svg?branch=master)](https://coveralls.io/github/eavMarshall/DiContainer?branch=master)
 
 # DiContainer
-DiContainer is a lightweight dependency injection container for PHP 7.1 - 7.3
+DiContainer is a lightweight dependency injection container for PHP 5.6.9, 7.1, 7.2 and 7.3
 
 #### How to start
 ```php
@@ -105,6 +105,7 @@ Dice is super fast, doing some test against it seem like a good idea
 PHP-DI is slow to start, but the more dependencys you have the better the performance (http://php-di.org/doc/php-definitions.html)
 
 ##PHP 7.3
+Performance tests for php 7.3
 
 ### A - Z tests
 This test creates classes A - Z. Class B has a dependency on A, Class C has a dependency on B, all the way down to Z
@@ -180,6 +181,7 @@ Dice|1.33ms
 DiContainer|0.13ms
 
 ##PHP 5.6 
+Performances tests for php 5.6
 
 ### A - Z tests
 This test creates classes A - Z. Class B has a dependency on A, Class C has a dependency on B, all the way down to Z

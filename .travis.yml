@@ -25,7 +25,8 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - phpunit --bootstrap vendor/autoload.php tests/UnitTest/tests.php --coverage-clover build/logs/clover.xml
+  - if [[ $(phpenv version-name) == '7.1' ]]; then /vendor/bin/phpunit --bootstrap vendor/autoload.php tests/UnitTest/tests.php --coverage-clover build/logs/clover.xml ; fi
+  - if [[ $(phpenv version-name) == '7.2' ]]; then phpunit --bootstrap vendor/autoload.php tests/UnitTest/tests.php --coverage-clover build/logs/clover.xml ; fi
 
 after_success:
   - travis_retry php vendor/bin/php-coveralls

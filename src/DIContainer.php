@@ -118,7 +118,7 @@ class DIContainer
             $parameters = $constructor->getParameters();
 
             foreach ($parameters as $parameter) {
-                $type = $parameter->getType();
+                $type = $parameter->getClass();
                 $initialParamInstances[] = $this->getInstanceOf(
                     $this->constructorCache[$class][] = $type ? $type->getName() : null
                 );

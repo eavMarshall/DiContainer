@@ -104,75 +104,152 @@ Dice is super fast, doing some test against it seem like a good idea
 (https://github.com/Level-2/Dice)
 PHP-DI is slow to start, but the more dependencys you have the better the performance (http://php-di.org/doc/php-definitions.html)
 
+##PHP 7.3
+
 ### A - Z tests
 This test creates classes A - Z. Class B has a dependency on A, Class C has a dependency on B, all the way down to Z
 
 Class | Dice | DIContainer | PHP-DI | Boiler plate
 --- | --- | --- | --- | ---
-A|0.29ms|0.26ms|2.18ms|0.16ms
-B|0.96ms|0.73ms|3.61ms|0.27ms
-C|1.67ms|1.12ms|3.22ms|0.36ms
-D|2.23ms|1.53ms|3.17ms|0.48ms
-E|2.87ms|1.96ms|3.21ms|0.57ms
-F|3.65ms|2.79ms|3.37ms|0.76ms
-G|4.43ms|2.72ms|3.23ms|0.77ms
-H|4.76ms|3.13ms|3.22ms|0.9ms
-I|5.64ms|4.35ms|3.26ms|1.08ms
-J|6.16ms|4.12ms|3.31ms|1.12ms
-K|6.81ms|4.39ms|4.27ms|1.85ms
-L|9.59ms|5.6ms|3.25ms|1.39ms
-M|10.2ms|5.46ms|4.58ms|1.58ms
-N|8.74ms|7.06ms|4.28ms|1.55ms
-O|11.58ms|11.05ms|6.75ms|2.5ms
-P|9.96ms|6.58ms|3.23ms|1.89ms
-Q|10.55ms|6.96ms|3.25ms|1.86ms
-R|11.59ms|7.34ms|3.34ms|2.26ms
-S|12.04ms|8.12ms|3.24ms|1.99ms
-T|12.61ms|8.58ms|3.2ms|2.13ms
-U|13.22ms|8.59ms|3.22ms|2.24ms
-V|13.73ms|9.05ms|3.87ms|2.41ms
-W|14.57ms|9.87ms|3.27ms|2.39ms
-X|15.61ms|10.12ms|3.46ms|2.57ms
-Y|16.42ms|11.1ms|3.18ms|2.7ms
-Z|17.31ms|11.2ms|3.93ms|2.82ms
+A|0.32ms|0.27ms|2.21ms|0.16ms
+B|0.94ms|0.73ms|3.72ms|0.44ms
+C|1.67ms|1.15ms|3.71ms|0.44ms
+D|2.31ms|1.55ms|5.73ms|1.05ms
+E|6.2ms|2ms|3.37ms|0.59ms
+F|3.63ms|2.49ms|3.42ms|1.02ms
+G|4.85ms|2.85ms|3.4ms|0.77ms
+H|4.87ms|3.24ms|3.34ms|0.9ms
+I|5.58ms|3.71ms|3.86ms|1.01ms
+J|7.76ms|4.1ms|3.35ms|1.09ms
+K|6.78ms|4.48ms|3.3ms|1.2ms
+L|7.5ms|4.86ms|3.33ms|1.28ms
+M|8.15ms|5.37ms|3.31ms|1.37ms
+N|8.76ms|5.74ms|3.31ms|1.49ms
+O|9.35ms|6.13ms|3.39ms|1.58ms
+P|10.01ms|6.58ms|3.33ms|1.67ms
+Q|10.72ms|7.17ms|3.38ms|1.77ms
+R|11.31ms|7.56ms|3.33ms|1.9ms
+S|13.28ms|8ms|3.41ms|2.03ms
+T|12.98ms|8.41ms|3.65ms|2.25ms
+U|15.5ms|8.75ms|3.32ms|2.26ms
+V|14.44ms|9.01ms|3.32ms|2.3ms
+W|17.04ms|9.61ms|3.38ms|2.52ms
+X|16.39ms|10.34ms|3.48ms|2.86ms
+Y|16.7ms|10.91ms|3.48ms|2.87ms
+Z|17.57ms|11.02ms|4.55ms|2.71ms
 
 ### Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated 1000 times
 Container | Time
 --- | ---
-Dice|1.15ms
-DiContainer|0.67ms
+Dice|1.18ms
+DiContainer|0.71ms
 
 ### Create instance 3 level deep x2 each layer 1000 times
 Container | Time
 --- | ---
-Dice|3.89ms
-DiContainer|2.88ms
+Dice|4.06ms
+DiContainer|3.06ms
 
 ### Create AllClassesAToZDependencies 1000 times
 This class has a dependency on all the A - Z classes
 
 Container | Time
 --- | ---
-Dice|222.38ms
-DiContainer|174.78ms
-PHP DI|32.18ms
+Dice|232.75ms
+DiContainer|151.44ms
+PHP DI|22.47ms
 
 ### Create AllClassesAToZDependenciesWithDice 1000 times
 This class has a dependency on dice, a single instance and AllClassesAToZDependencies
 
 Container | Time
 --- | ---
-Dice|235.53ms
+Dice|238.37ms
 
 ### Create AllClassesAToZDependencies 1000 times
 This class has a dependency on DIContainer, a single instance and AllClassesAToZDependenciesWithDiContainer
 
 Container | Time
 --- | ---
-DiContainer|159.31ms
+DiContainer|152.79ms
 
 ### Inject itself into class 1000 times
 Container | Time
 --- | ---
-Dice|1.45ms
-DiContainer|0.14ms
+Dice|1.33ms
+DiContainer|0.13ms
+
+##PHP 5.6 
+
+### A - Z tests
+This test creates classes A - Z. Class B has a dependency on A, Class C has a dependency on B, all the way down to Z
+
+Class | Dice | DIContainer | PHP-DI | Boiler plate
+--- | --- | --- | --- | ---
+A|0.71ms|0.66ms|11.91ms|0.26ms
+B|2.36ms|1.6ms|28.22ms|0.52ms
+C|4.21ms|2.56ms|28ms|0.83ms
+D|5.91ms|3.54ms|27.83ms|1.11ms
+E|7.61ms|4.54ms|27.85ms|1.41ms
+F|9.25ms|5.47ms|28.09ms|1.69ms
+G|11.02ms|6.47ms|28.22ms|1.97ms
+H|14.96ms|11.34ms|32.04ms|2.35ms
+I|15.05ms|8.95ms|29.74ms|2.68ms
+J|17.39ms|10.06ms|29.46ms|3.17ms
+K|21.74ms|11.99ms|30.74ms|3.23ms
+L|20.63ms|12.68ms|31.13ms|3.58ms
+M|22.74ms|13.6ms|30.5ms|3.87ms
+N|24.17ms|14.13ms|29.48ms|4.08ms
+O|25.79ms|14.97ms|29.26ms|4.52ms
+P|27.89ms|16.59ms|29.68ms|5.03ms
+Q|29.89ms|17.26ms|29.47ms|5.28ms
+R|30.01ms|17.5ms|27.96ms|5.39ms
+S|31.65ms|18.32ms|28.02ms|5.69ms
+T|33.21ms|19.22ms|27.93ms|5.92ms
+U|35.06ms|20.72ms|28.21ms|6.34ms
+V|36.76ms|21.26ms|27.86ms|6.65ms
+W|38.71ms|22.21ms|27.91ms|6.96ms
+X|40.67ms|23.35ms|28.24ms|7.35ms
+Y|42.76ms|24.62ms|27.99ms|7.7ms
+Z|44.47ms|25.31ms|27.89ms|7.98ms
+
+### Create class SessionInfo as a singleton and inject it into new instance of ClassHoldingSessionInfoIsUpdated 1000 times
+Container | Time
+--- | ---
+Dice|2.59ms
+DiContainer|1.47ms
+
+### Create instance 3 level deep x2 each layer 1000 times
+Container | Time
+--- | ---
+Dice|10.25ms
+DiContainer|7.67ms
+
+### Create AllClassesAToZDependencies 1000 times
+This class has a dependency on all the A - Z classes
+
+Container | Time
+--- | ---
+Dice|595.47ms
+DiContainer|345.75ms
+PHP DI|216.16ms
+
+### Create AllClassesAToZDependenciesWithDice 1000 times
+This class has a dependency on dice, a single instance and AllClassesAToZDependencies
+
+Container | Time
+--- | ---
+Dice|683.76ms
+
+### Create AllClassesAToZDependencies 1000 times
+This class has a dependency on DIContainer, a single instance and AllClassesAToZDependenciesWithDiContainer
+
+Container | Time
+--- | ---
+DiContainer|354.46ms
+
+### Inject itself into class 1000 times
+Container | Time
+--- | ---
+Dice|2.1ms
+DiContainer|0.31ms

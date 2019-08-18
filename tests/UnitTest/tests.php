@@ -15,8 +15,9 @@ final class tests extends TestCase
     /** @var DIContainer */
     private $dic;
 
-    protected function setUp(): void
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
+        parent::__construct($name, $data, $dataName);
         $this->dic = new DIContainer();
     }
 

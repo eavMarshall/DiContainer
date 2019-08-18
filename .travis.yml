@@ -11,6 +11,7 @@ php:
   - 7.2
 
 install:
+  -
   - composer require --dev php-coveralls/php-coveralls
 
 cache:
@@ -19,6 +20,8 @@ cache:
 
 before_script:
   - composer install -n
+  - if [[ $(phpenv version-name) == '7.1' ]]; then composer require --dev phpunit/phpunit ^7 -n ; fi
+  - if [[ $(phpenv version-name) == '7.2' ]]; then composer require --dev phpunit/phpunit ^8 -n ; fi
 
 script:
   - mkdir -p build/logs

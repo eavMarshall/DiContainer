@@ -10,7 +10,6 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
         "php-di/php-di": "6.0.9",
         "level-2/dice": "4.0.1"
     }

@@ -9,6 +9,7 @@ DiContainer is a lightweight dependency injection container for PHP 5.6.9, 7.1, 
 $diContainer = new DIContainer();
 $myClass = $diContainer->getInstanceOf(MyClass::class);
 ```
+The function getInstanceOf will return a instance of MyClass with all it's dependencies and their dependencies injected into the constructor.
 
 #### This container is designed to be
 - [Immutable](https://github.com/eavMarshall/DiContainer/wiki/Immutable)

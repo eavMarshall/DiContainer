@@ -80,9 +80,7 @@ class DIContainer
                 return $this->singeInstancesCache[$class];
             }
 
-            $instance = $this->_getInstance($class);
-
-            return $instance;
+            return $this->_getInstance($class);
         }
 
         return new $class(...$parameters);

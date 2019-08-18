@@ -28,11 +28,12 @@ class DIContainer
     }
 
     /**
-     * Instead of creating a new instance of DIContainer, you should probably use this function get get your instance
-     * in your application code.
+     * Instead of creating a new instance of DIContainer, you should probably use this function get get your
+     * instance in your application code.
      * This will help keep your single instances collection unique.
-     * In test code however, you should try and create a new DIContainer every test, to prevent your single instance
-     * state from spilling into another test
+     * In test code however, you should try and create a new DIContainer every test, to prevent your single
+     * instance state from spilling into another test
+     *
      * @return DIContainer
      */
     public static function getInstance()
@@ -42,9 +43,10 @@ class DIContainer
 
     /**
      * This function is only here to help testing.
-     * DiContainer rules are immutable. This is to prevent someone from adding a rule in production code. When a
-     * rule is added, a new instance of DIContainer is returned with the new rule.
-     * In production a containers should only ever had 1 rule, return itself if an instance of itself is required
+     * DiContainer rules are immutable. This is to prevent someone from adding a rule in production code.
+     * When a rule is added, a new instance of DIContainer is returned with the new rule.
+     * In production a containers should only ever had 1 rule, return itself if an instance of itself is
+     * required
      *
      * @param $class
      * @param $overrideFunction
@@ -61,6 +63,7 @@ class DIContainer
     /**
      * Function getInstanceOf creates a new instance of $class that do not implements SingleInstance interface
      * Classes that implement single instance interface will have the same instance returned
+     *
      * @param $class
      * @param $parameters
      * @return mixed|null
@@ -116,7 +119,9 @@ class DIContainer
 
             foreach ($parameters as $parameter) {
                 $type = $parameter->getType();
-                $initialParamInstances[] = $this->getInstanceOf($this->constructorCache[$class][] = $type ? $type->getName() : null);
+                $initialParamInstances[] = $this->getInstanceOf(
+                    $this->constructorCache[$class][] = $type ? $type->getName() : null
+                );
             }
         }
 

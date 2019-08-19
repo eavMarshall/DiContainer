@@ -17,3 +17,5 @@ The function getInstanceOf will return a instance of MyClass with all it's depen
 - [Work immediately with no setup](https://github.com/eavMarshall/DiContainer/wiki/Work-immediately-with-no-setup%3F)
 - [Help remove the singleton pattern](https://github.com/eavMarshall/DiContainer/wiki/Help-remove-the-singleton-pattern)
 - [Testing friendly, easily swapping instances for mock/stubs](https://github.com/eavMarshall/DiContainer/wiki/Testing-friendly,-easily-swapping-instances-for-mock-stubs)
+- [Performances tests for php 5.6](https://github.com/eavMarshall/DiContainer/wiki/Performances-tests-for-php-5.6)
+- [Performance tests for php 7.3](https://github.com/eavMarshall/DiContainer/wiki/Performance-tests-for-php-7.3)

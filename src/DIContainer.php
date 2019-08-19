@@ -61,7 +61,7 @@ class DIContainer
     }
 
     /**
-     * Function getInstanceOf creates a new instance of $class that do not implements SingleInstance interface
+     * Function getInstanceOf creates a new instance of $class that does not implements SingleInstance interface
      * Classes that implement single instance interface will have the same instance returned
      *
      * @param $class

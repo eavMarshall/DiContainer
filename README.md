@@ -11,6 +11,7 @@ $myClass = $diContainer->getInstanceOf(MyClass::class);
 ```
 The function getInstanceOf will return a instance of MyClass with all it's dependencies and their dependencies injected into the constructor.
 
+
 #### This container is designed to be
 - [Immutable](https://github.com/eavMarshall/DiContainer/wiki/Immutable)
 - [Rule free](https://github.com/eavMarshall/DiContainer/wiki/Rule-free)

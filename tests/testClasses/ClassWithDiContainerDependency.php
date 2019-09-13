@@ -5,7 +5,7 @@ namespace tests\testClasses;
 use Di\DIContainer;
 use Di\SingleInstance;
 
-class ClassWithDiContainerDependency implements SingleInstance
+class ClassWithDiContainerDependency
 {
     public $DIContainer;
 

@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/eavMarshall/DiContainer/badge.svg?branch=master)](https://coveralls.io/github/eavMarshall/DiContainer?branch=master)
 
 # DiContainer
-DiContainer is a lightweight dependency injection container for PHP 5.6.9, 7.1, 7.2 and 7.3
+DiContainer is a lightweight dependency injection container for PHP 5.6.9, 7.1 - 7.4
 
 #### How to start [here](https://github.com/eavMarshall/DiContainer/wiki/How-to-start)
 ```php

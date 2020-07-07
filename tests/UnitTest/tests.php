@@ -1,13 +1,16 @@
 <?php
 
 use Di\DIContainer;
+use Di\GlobalInstances;
 use PHPUnit\Framework\TestCase;
 use tests\testClasses\ClassHoldingSessionInfoIsUpdated;
 use tests\testClasses\ClassSingleInstance;
 use tests\testClasses\ClassThatNeedsClassWithConstructorDependencies;
 use tests\testClasses\ClassWithDiContainerDependency;
 use tests\testClasses\ClassWithoutDependencies;
+use tests\testClasses\GlobalInstanceProvider;
 use tests\testClasses\nested\top;
+use tests\testClasses\NewInstanceProvider;
 use tests\testClasses\SessionInfo;
 
 final class tests extends TestCase
@@ -135,5 +138,65 @@ final class tests extends TestCase
         $overrideContainer = $container->addOverrideRule(DIContainer::class, static function() { return new DIContainer(); });
 
         self::assertSame($overrideContainer, $overrideContainer->getInstanceOf(DIContainer::class));
+    }
+
+    public function saveInstanceValidationProvider()
+    {
+        return [
+            'error: Class can not be null' => [null, null, InvalidArgumentException::class, 'Class can not be null'],
+            'error: class not exist' => ['some class', null, ReflectionException::class, 'Class some class does not exist'],
+            'error: class not exists with different param' => ['some class', new stdClass(), ReflectionException::class, 'Class some class does not exist'],
+        ];
+    }
+
+    /**
+     * @dataProvider saveInstanceValidationProvider
+     */
+    public function testSaveInstanceValidation($class, $instances, $errorType, $errorMessage)
+    {
+        $container = new DIContainer();
+        self::expectException($errorType);
+        self::expectExceptionMessage($errorMessage);
+        $container->getInstanceOf(GlobalInstances::class)->getGlobalInstanceOf($class, $instances);
+    }
+
+    public function testSameInstanceReturns()
+    {
+        $container = new DIContainer();
+        $globalInstances = $container->getInstanceOf(GlobalInstances::class);
+        $stdClass = new stdClass();
+        $classFromGlobal = $globalInstances->getGlobalInstanceOf(stdClass::class);
+
+        self::assertNotSame($stdClass, $classFromGlobal);
+        self::assertSame($classFromGlobal, $globalInstances->getGlobalInstanceOf(stdClass::class));
+        self::assertNotSame($stdClass, $globalInstances->getGlobalInstanceOf(stdClass::class));
+
+        self::assertNotSame(
+            $stdClass,
+            (new DIContainer())->getInstanceOf(GlobalInstances::class)->getGlobalInstanceOf(stdClass::class),
+            'Containers should have their own "global" scope'
+        );
+
+        self::assertNotSame(
+            $container->getInstanceOf(stdClass::class),
+            (new DIContainer())->getInstanceOf(GlobalInstances::class)->getGlobalInstanceOf(stdClass::class),
+            'Container should still be able to create new instances'
+        );
+    }
+
+    public function testNewInstanceProviders()
+    {
+        $container = new DIContainer();
+        $newInstanceProvider = $container->getInstanceOf(NewInstanceProvider::class);
+
+        self::assertNotSame($newInstanceProvider->getNewInstance(), $newInstanceProvider->getNewInstance());
+    }
+
+    public function testGlobalInstanceProvider()
+    {
+        $container = new DIContainer();
+        $globalInstanceProvider = $container->getInstanceOf(GlobalInstanceProvider::class);
+
+        self::assertSame($globalInstanceProvider->getGlobalInstance(), $globalInstanceProvider->getGlobalInstance());
     }
 }

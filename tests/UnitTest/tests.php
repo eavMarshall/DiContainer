@@ -128,4 +128,12 @@ final class tests extends TestCase
         self::assertSame($firstCall, DIContainer::getInstance());
         self::assertNotSame($this->dic, DIContainer::getInstance());
     }
+
+    public function testCanNotOverrideSelf()
+    {
+        $container = new DIContainer();
+        $overrideContainer = $container->addOverrideRule(DIContainer::class, static function() { return new DIContainer(); });
+
+        self::assertSame($overrideContainer, $overrideContainer->getInstanceOf(DIContainer::class));
+    }
 }

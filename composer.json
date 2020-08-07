@@ -1,6 +1,6 @@
 {
     "name": "eavmarshall/dicontainer",
-    "description": "Super simple PHP dependency injection container"
+    "description": "Super simple PHP dependency injection container",
     
     "autoload": {
         "psr-4": {

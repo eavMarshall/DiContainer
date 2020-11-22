@@ -88,14 +88,6 @@ final class tests extends TestCase
         self::assertFalse(isset($instance1->level1b->level2d->nothingHere));
     }
 
-    public function testNewInstanceWithParams()
-    {
-        $message = 'this is a message from my new exception';
-        $exception = $this->dic->getInstanceOf(Exception::class, [$message]);
-
-        self::assertEquals($message, $exception->getMessage());
-    }
-
     public function testApplyingRuleReturnsNewObject()
     {
         $ruleDic = $this->dic->addOverrideRule(Exception::class, static function () {
@@ -103,8 +95,8 @@ final class tests extends TestCase
         });
 
         self::assertNotSame($this->dic, $ruleDic);
-        $nonRuleType = $this->dic->getInstanceOf(Exception::class, ['test']);
-        $ruleType = $ruleDic->getInstanceOf(Exception::class, ['test']);
+        $nonRuleType = $this->dic->getInstanceOf(Exception::class);
+        $ruleType = $ruleDic->getInstanceOf(Exception::class);
 
         self::assertInstanceOf(Exception::class, $nonRuleType);
         self::assertInstanceOf(InvalidArgumentException::class, $ruleType);

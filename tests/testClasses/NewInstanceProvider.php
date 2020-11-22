@@ -9,6 +9,6 @@ class NewInstanceProvider extends DIProvider
 {
     public function getNewInstance()
     {
-        return $this->getDiContainer()->getInstanceOf(level1a::class);
+        return $this->getInstanceOf(level1a::class);
     }
 }

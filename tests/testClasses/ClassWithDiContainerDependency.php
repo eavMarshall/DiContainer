@@ -3,7 +3,6 @@
 namespace tests\testClasses;
 
 use Di\DIContainer;
-use Di\SingleInstance;
 
 class ClassWithDiContainerDependency
 {

@@ -11,14 +11,9 @@ abstract class DIGlobalProvider implements SingleInstance
         $this->container = $container;
     }
 
-    protected function getDiContainer(): DIContainer
-    {
-        return $this->container;
-    }
-
     protected function getGlobalInstanceOf($class)
     {
-        return $this->getDiContainer()
+        return $this->container
             ->getInstanceOf(GlobalInstances::class)
             ->getGlobalInstanceOf($class);
     }

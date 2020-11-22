@@ -33,20 +33,15 @@ class DIContainer
         return new self(array_merge($this->overrideRules, [$class => $overrideFunction]));
     }
 
-    public function getInstanceOf($class, array $parameters = null)
+    public function getInstanceOf($class)
     {
         if (!$class) return null;
         if (isset($this->overrideRules[$class])) return $this->overrideRules[$class]();
 
-        if ($parameters === null) {
-            if (isset($this->singeInstancesCache[$class])) return $this->singeInstancesCache[$class];
-            return $this->_getInstance($class);
-        }
-
-        return new $class(...$parameters);
+        return $this->singeInstancesCache[$class] ?? $this->buildInstance($class);
     }
 
-    private function _getInstance($class)
+    private function buildInstance($class)
     {
         if (isset($this->constructorCache[$class])) {
             if (empty($this->constructorCache[$class])) return new $class();
@@ -59,10 +54,10 @@ class DIContainer
             return new $class(...$paramInstances);
         }
 
-        return $this->_getInstanceOnFirstRun($class);
+        return $this->buildInstanceOnFirstRun($class);
     }
 
-    private function _getInstanceOnFirstRun($class)
+    private function buildInstanceOnFirstRun($class)
     {
         $reflectionClass = new ReflectionClass($class);
         $constructor = $reflectionClass->getConstructor();

@@ -14,10 +14,6 @@ class GlobalInstances implements SingleInstance
         $this->container = $container;
     }
 
-    protected function getDiContainer(): DIContainer
-    {
-        return $this->container;
-    }
     private function getGlobalInstance($class)
     {
         return $this->globalInstances[$class];
@@ -40,7 +36,7 @@ class GlobalInstances implements SingleInstance
         }
 
         if (!$this->hasInstance($class)) {
-            $this->saveInstance($class, $this->getDiContainer()->getInstanceOf($class));
+            $this->saveInstance($class, $this->container->getInstanceOf($class));
         }
 
         return $this->getGlobalInstance($class);

@@ -11,9 +11,9 @@ abstract class DIProvider implements SingleInstance
         $this->container = $container;
     }
 
-    protected function getDiContainer(): DIContainer
+    protected function getInstanceOf($class)
     {
-        return $this->container;
+        return $this->container->getInstanceOf($class);
     }
 
     abstract public function getNewInstance();

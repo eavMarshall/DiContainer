@@ -3,9 +3,9 @@
 
 # DiContainer
 DiContainer is a lightweight dependency injection container for PHP
-(v1.01 - PHP 5.6)
-(v1.03 - PHP 7)
-(v1.04 - PHP 8, not yet released)
+- (v1.01 - PHP 5.6)
+- (v1.03 - PHP 7)
+- (v1.04 - PHP 8, not yet released)
 
 #### How to start [here](https://github.com/eavMarshall/DiContainer/wiki/How-to-start)
 ```php

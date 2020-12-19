@@ -60,6 +60,9 @@ class DIContainer
     private function buildInstanceOnFirstRun($class)
     {
         $reflectionClass = new ReflectionClass($class);
+        if ($reflectionClass->isInterface()) {
+            return null;
+        }
         $constructor = $reflectionClass->getConstructor();
         $this->constructorCache[$class] = [];
         $initialParamInstances = [];
@@ -68,7 +71,9 @@ class DIContainer
             $parameters = $constructor->getParameters();
 
             foreach ($parameters as $parameter) {
-                $type = $parameter->getClass();
+                $type = $parameter->getType() && !$parameter->getType()->isBuiltin()
+                    ? new ReflectionClass($parameter->getType()->getName())
+                    : null;
                 $initialParamInstances[] = $this->getInstanceOf(
                     $this->constructorCache[$class][] = $type ? $type->getName() : null
                 );

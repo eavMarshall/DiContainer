@@ -111,7 +111,7 @@ final class tests extends TestCase
     public function testClassNotExist()
     {
         $this->expectException(ReflectionException::class);
-        $this->expectExceptionMessage('Class This_is_a_class_that_does_not_exist does not exist');
+        $this->expectExceptionMessage('Class "This_is_a_class_that_does_not_exist" does not exist');
         $this->dic->getInstanceOf('This_is_a_class_that_does_not_exist');
     }
 
@@ -136,8 +136,8 @@ final class tests extends TestCase
     {
         return [
             'error: Class can not be null' => [null, null, InvalidArgumentException::class, 'Class can not be null'],
-            'error: class not exist' => ['some class', null, ReflectionException::class, 'Class some class does not exist'],
-            'error: class not exists with different param' => ['some class', new stdClass(), ReflectionException::class, 'Class some class does not exist'],
+            'error: class not exist' => ['some class', null, ReflectionException::class, 'Class "some class" does not exist'],
+            'error: class not exists with different param' => ['some class', new stdClass(), ReflectionException::class, 'Class "some class" does not exist'],
         ];
     }
 

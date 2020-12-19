@@ -1,0 +1,17 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Di\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "9.5",
+        "php-di/php-di": "6.0.9",
+        "level-2/dice": "4.0.1"
+    }
+}

@@ -2,7 +2,7 @@
     "name": "eavmarshall/dicontainer",
     "description": "Super simple PHP dependency injection container",
     "require": {
-        "php": "^7.0"
+        "php": "^8"
     },
     "autoload": {
         "psr-4": {

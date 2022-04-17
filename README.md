@@ -22,6 +22,7 @@ The function getInstanceOf will return a instance of MyClass with all it's depen
 - [Testing friendly, easily swapping instances for mock/stubs](https://github.com/eavMarshall/DiContainer/wiki/Testing-friendly,-easily-swapping-instances-for-mock-stubs)
 - [Performances tests for php 5.6](https://github.com/eavMarshall/DiContainer/wiki/Performances-tests-for-php-5.6)
 - [Performance tests for php 7.3](https://github.com/eavMarshall/DiContainer/wiki/Performance-tests-for-php-7.3)
+- [Performance tests for php 8](https://github.com/eavMarshall/DiContainer/wiki/Performance-test-for-php-8)
 
 #### Creating providers to pass the same instance everywhere
 When implementing SingleInstance the container will pass back the same service everywhere. No config needed.

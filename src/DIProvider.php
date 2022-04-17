@@ -2,6 +2,11 @@
 
 namespace Di;
 
+/**
+ * @author     Elliott Marshall
+ * @copyright  2022
+ * @license    MIT
+ */
 abstract class DIProvider implements SingleInstance
 {
     private $container;

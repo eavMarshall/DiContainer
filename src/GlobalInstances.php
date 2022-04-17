@@ -4,6 +4,11 @@ namespace Di;
 
 use InvalidArgumentException;
 
+/**
+ * @author     Elliott Marshall
+ * @copyright  2022
+ * @license    MIT
+ */
 class GlobalInstances implements SingleInstance
 {
     private $container;

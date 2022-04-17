@@ -1,9 +1,8 @@
 <?php
 /**
  * @author     Elliott Marshall
- * @copyright  2020
+ * @copyright  2022
  * @license    MIT
- * @version    1.0.1
  */
 
 namespace Di;

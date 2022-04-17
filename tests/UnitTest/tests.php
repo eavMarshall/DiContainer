@@ -11,6 +11,7 @@ use tests\testClasses\ClassWithoutDependencies;
 use tests\testClasses\GlobalInstanceProvider;
 use tests\testClasses\nested\top;
 use tests\testClasses\NewInstanceProvider;
+use tests\testClasses\PHP8ConstructorPropertyPromotion;
 use tests\testClasses\SessionInfo;
 
 final class tests extends TestCase
@@ -190,5 +191,14 @@ final class tests extends TestCase
         $globalInstanceProvider = $container->getInstanceOf(GlobalInstanceProvider::class);
 
         self::assertSame($globalInstanceProvider->getGlobalInstance(), $globalInstanceProvider->getGlobalInstance());
+    }
+
+    public function testPhp8ConstructorPropertyPromotionClassCanBeCreated()
+    {
+        $container = new DIContainer();
+        $instance = $container->getInstanceOf(PHP8ConstructorPropertyPromotion::class);
+        self::assertInstanceOf(PHP8ConstructorPropertyPromotion::class, $instance);
+        self::assertInstanceOf(NewInstanceProvider::class, $instance->instanceProvider);
+        self::assertInstanceOf(SessionInfo::class, $instance->sessionInfo);
     }
 }

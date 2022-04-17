@@ -34,47 +34,37 @@ class MyClass implements SingleInstance {
   }
 }
 
-trait DiContainerGetterTrait
-{
-    /**
-     * @return DIContainer
-     */
-    protected function getDiContainer()
-    {
-        return DIContainer::getInstance();
-    }
-}
+$diContainer = new DIContainer();
+$myClass1 = $diContainer->getInstanceOf(MyClass::class);
+$myClass2 = $diContainer->getInstanceOf(MyClass::class);
+// myClass1 & myClass2 are the same instance
+```
 
-trait GlobalMyClassTrait
-{
-    /**
-     * @return MyClass
-     */
-    protected function getGlobalMyClass()
-    {
-        return $this->getDiContainer()->getInstanceOf(MyClass::class);
-    }
-
-    /**
-     * @return DIContainer
-     */
-    abstract protected function getDiContainer();
-}
-
-class MyOtherClass()
-{
-  use DiContainerGetterTrait;
-  use GlobalMyClassTrait;
-  
-  public function myOtherMethod()
+If you need a global class and a single instance of the same class
+```php
+class MyClass {
+  public function getMyService()
   {
-    return $this-getGlobalMyClass()->getMyService();
+    return 'Hello world';
   }
 }
 
+class GlobalMyClass {
+    public function __construct(private MyClass $myClass) {}
+    public MyClass function getGlobalInstance() {
+        return $this->myClass;
+    }
+}
+
 $diContainer = new DIContainer();
-$myOtherClass = $diContainer->getInstanceOf(MyOtherClass::class);
-$myOtherClass->myOtherMethod(); // returns Hello world
+$myClass1 = $diContainer->getInstanceOf(MyClass::class);
+$myClass2 = $diContainer->getInstanceOf(MyClass::class);
+// myClass1 & myClass2 are different instances
+
+$myClass3 = $diContainer->getInstanceOf(GlobalMyClass::class)->getGlobalInstance();
+$myClass4 = $diContainer->getInstanceOf(GlobalMyClass::class)->getGlobalInstance();
+// myClass3 & myClass4 are the same instance
+// myClass3 & 4 are different instances for class1 & 2
 ```
 
 #### Easy to test
@@ -89,7 +79,7 @@ class test_getMyService()
         ->getMock();
     $myClassMock->method('getMyService')->willReturn('Hello world v2');
     
-    //Notice here, the addOverrideRule function return a new container
+    //addOverrideRule function return a new container with the new rules
     $testContainer = (new DIContainer())->addOverrideRule(MyClass::class, function () use (&$myClassMock) {
         return $myClassMock;
     });

@@ -1,21 +1,23 @@
 <?php
+
+namespace Di;
+
+use JetBrains\PhpStorm\Pure;
+use ReflectionClass;
+use ReflectionException;
+use function array_merge;
+
 /**
  * @author     Elliott Marshall
  * @copyright  2022
  * @license    MIT
  */
-
-namespace Di;
-
-use ReflectionClass;
-use function array_merge;
-
 class DIContainer
 {
-    private static $thisInstance;
-    private $overrideRules;
-    private $singeInstancesCache = [];
-    private $constructorCache = [];
+    private static $instance;
+    private array $overrideRules;
+    private array $singeInstancesCache = [];
+    private array $constructorCache = [];
 
     public function __construct($overrideRules = [])
     {
@@ -24,10 +26,10 @@ class DIContainer
 
     public static function getInstance()
     {
-        return self::$thisInstance ?: self::$thisInstance = new self();
+        return self::$instance ?: self::$instance = new self();
     }
 
-    public function addOverrideRule($class, $overrideFunction)
+    #[Pure] public function addOverrideRule($class, $overrideFunction)
     {
         return new self(array_merge($this->overrideRules, [$class => $overrideFunction]));
     }
@@ -40,51 +42,36 @@ class DIContainer
         return $this->singeInstancesCache[$class] ?? $this->buildInstance($class);
     }
 
+    /** @throws ReflectionException */
     private function buildInstance($class)
     {
-        if (isset($this->constructorCache[$class])) {
-            if (empty($this->constructorCache[$class])) return new $class();
+        if (!isset($this->constructorCache[$class])) return $this->buildInstanceOnFirstRun($class);
 
-            $paramInstances = [];
-            foreach ($this->constructorCache[$class] as $type) {
-                $paramInstances[] = $this->getInstanceOf($type);
-            }
-
-            return new $class(...$paramInstances);
+        $paramInstances = [];
+        foreach ($this->constructorCache[$class] as $type) {
+            $paramInstances[] = $this->getInstanceOf($type);
         }
 
-        return $this->buildInstanceOnFirstRun($class);
+        return new $class(...$paramInstances);
     }
 
+    /** @throws ReflectionException */
     private function buildInstanceOnFirstRun($class)
     {
         $reflectionClass = new ReflectionClass($class);
-        if ($reflectionClass->isInterface()) {
-            return null;
-        }
-        $constructor = $reflectionClass->getConstructor();
+        if ($reflectionClass->isInterface()) return null;
+
         $this->constructorCache[$class] = [];
         $initialParamInstances = [];
 
-        if ($constructor !== null) {
-            $parameters = $constructor->getParameters();
-
-            foreach ($parameters as $parameter) {
-                $type = $parameter->getType() && !$parameter->getType()->isBuiltin()
-                    ? new ReflectionClass($parameter->getType()->getName())
-                    : null;
-                $initialParamInstances[] = $this->getInstanceOf(
-                    $this->constructorCache[$class][] = $type ? $type->getName() : null
-                );
-            }
+        $parameters = $reflectionClass?->getConstructor()?->getParameters() ?? [];
+        foreach ($parameters as $parameter) {
+            $typeName = !$parameter->getType()?->isBuiltin() ? $parameter->getType()?->getName() : null;
+            $initialParamInstances[] = $this->getInstanceOf($this->constructorCache[$class][] = $typeName);
         }
 
-        $instance = new $class(...$initialParamInstances);
-
-        if ($reflectionClass->implementsInterface(SingleInstance::class)) {
-            $this->singeInstancesCache[$class] = $instance;
-        }
-
-        return $instance;
+        return $reflectionClass->implementsInterface(SingleInstance::class)
+            ? $this->singeInstancesCache[$class] = new $class(...$initialParamInstances)
+            : new $class(...$initialParamInstances);
     }
 }

@@ -136,7 +136,7 @@ final class tests extends TestCase
     public function saveInstanceValidationProvider()
     {
         return [
-            'error: Class can not be null' => [null, null, InvalidArgumentException::class, 'Class can not be null'],
+            'error: Class can not be null' => [null, null, InvalidArgumentException::class, 'Class can not be falsy'],
             'error: class not exist' => ['some class', null, ReflectionException::class, 'Class "some class" does not exist'],
             'error: class not exists with different param' => ['some class', new stdClass(), ReflectionException::class, 'Class "some class" does not exist'],
         ];

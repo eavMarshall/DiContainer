@@ -11,13 +11,9 @@ use InvalidArgumentException;
  */
 class GlobalInstances implements SingleInstance
 {
-    private $container;
     private $globalInstances = [];
 
-    public function __construct(DIContainer $container)
-    {
-        $this->container = $container;
-    }
+    public function __construct(private DIContainer $container) {}
 
     private function getGlobalInstance($class)
     {
@@ -36,8 +32,8 @@ class GlobalInstances implements SingleInstance
 
     public function getGlobalInstanceOf($class)
     {
-        if ($class === null) {
-            throw new InvalidArgumentException('Class can not be null');
+        if (!$class) {
+            throw new InvalidArgumentException('Class can not be falsy');
         }
 
         if (!$this->hasInstance($class)) {

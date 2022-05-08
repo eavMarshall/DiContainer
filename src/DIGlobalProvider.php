@@ -9,12 +9,7 @@ namespace Di;
  */
 abstract class DIGlobalProvider implements SingleInstance
 {
-    private $container;
-
-    public function __construct(DIContainer $container)
-    {
-        $this->container = $container;
-    }
+    public function __construct(private DIContainer $container) {}
 
     protected function getGlobalInstanceOf($class)
     {
@@ -22,7 +17,5 @@ abstract class DIGlobalProvider implements SingleInstance
             ->getInstanceOf(GlobalInstances::class)
             ->getGlobalInstanceOf($class);
     }
-    abstract public function getGlobalInstance(
-
-    );
+    abstract public function getGlobalInstance();
 }

@@ -24,16 +24,17 @@ class DIContainer
         $this->overrideRules = array_merge($overrideRules, [self::class => function () { return $this; }]);
     }
 
-    public static function getInstance()
+    public static function getInstance(): DIContainer
     {
         return self::$instance ?: self::$instance = new self();
     }
 
-    #[Pure] public function addOverrideRule($class, $overrideFunction)
+    #[Pure] public function addOverrideRule($class, $overrideFunction): DIContainer
     {
         return new self(array_merge($this->overrideRules, [$class => $overrideFunction]));
     }
 
+    /** @throws ReflectionException */
     public function getInstanceOf($class)
     {
         if (!$class) return null;

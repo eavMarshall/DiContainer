@@ -30,6 +30,7 @@ class GlobalInstances implements SingleInstance
         $this->globalInstances[$class] = $instance;
     }
 
+    /** @throws \ReflectionException */
     public function getGlobalInstanceOf($class)
     {
         if (!$class) {
